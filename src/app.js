@@ -4,6 +4,7 @@ import Vuetify from 'vuetify';
 import Bounce from 'bounce.js';
 
 import App from 'components/app.vue';
+import Leaderboard from 'components/leaderboard.vue';
 
 Vue.use(Vuetify);
 Vue.use(VueRouter);
@@ -11,7 +12,8 @@ Vue.use(VueRouter);
 require('./style.sass');
 
 const routes = [
-  {path: '/', component: App}
+  {path: '/', component: App},
+  {path: '/leaderboard', component: Leaderboard}
 ]
 
 const router = new VueRouter({

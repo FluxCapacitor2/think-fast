@@ -126,3 +126,6 @@ div#math-container {
 span.katex {
   font-family: Roboto, Helvecita, KaTeX_Main, sans-serif;
   font-size: 300%; }
+
+::-webkit-scrollbar {
+  display: none; }
