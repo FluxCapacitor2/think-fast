@@ -1,0 +1,57 @@
+//
+//   IMPORTS
+//
+@import url('https://fonts.googleapis.com/css?family=Frijole')
+@import 'color_palatte'
+@import 'vuetify.min.css'
+//
+//   NORMAL STYLES (static)
+//
+body
+  font-family: helvecita, roboto, KaTeX_Main
+  overflow: hidden
+//
+//   ANIMATED BACKGROUND COLOR (on <body> tag)
+//
+$bg_colors: ($md-red-500, $md-pink-500, $md-purple-500, $md-deep-purple-500, $md-indigo-500, $md-blue-500, $md-light-blue-500, $md-cyan-500, $md-teal-500, $md-green-500, $md-light-green-500, $md-lime-500, $md-yellow-500, $md-amber-500, $md-orange-500, $md-deep-orange-500, $md-brown-500, $md-grey-500, $md-blue-grey-500, $md-red-500)
+$count: length($bg_colors)
+$duration: $count*2
+
+body
+  will-change: background-color
+  background-color: $md_blue_500
+  animation: bg-color #{$duration}s linear 0s infinite normal
+
+@keyframes bg-color
+  $j: 0
+  @each $i in $bg_colors
+    $j: $j + 1
+    #{ ($j / $count) * 100 }%
+      background-color: $i
+
+.bounce-pulse
+  //animation: bounce-pulse 1s linear infinite both
+  animation-name: bounce-pulse
+  animation-duration: 750ms
+  animation-timing-function: linear
+  animation-iteration-count: infinite
+  animation-direction: alternate
+.think-fast
+  font-family: 'Frijole', fantasy
+  font-size: 200%
+div
+  &#app
+    margin-top: 120px
+  &#math-problem
+    background-color: transparent !important
+    text-align: center
+    margin: auto
+    width: 25%
+    &:not(.active)
+      display: none
+  &#math-container
+    background-color: transparent !important
+span
+  &.katex
+    font-family: Roboto, Helvecita, KaTeX_Main, sans-serif
+    font-size: 300%
