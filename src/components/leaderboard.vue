@@ -23,7 +23,7 @@
     data() {
       return {
         /*Component Data*/
-        color: '54, 106, 188',
+        color: '255, 255, 255', //   54, 106, 188
         leaderboard: [
           {name: "Testing", score: 1200000},
           {name: "Is a nerd",  score: 1190000},
@@ -46,7 +46,6 @@
         this.leaderboard[i].rank = i+1;
         this.leaderboard[i].opacity = map(op, 0, players, 0, 1);
         this.leaderboard[i].style = {backgroundColor:'rgba(' + this.color + ', ' + this.leaderboard[i].opacity + ')'}
-        console.log(this.leaderboard[i].opacity);
       }
     }
   }
@@ -64,5 +63,8 @@
   div#leaderboard ul {
     list-style-type: none;
     font-size: 24px;
+  }
+  body {
+    overflow: auto !important;
   }
 </style>

@@ -8,13 +8,22 @@
   <div id="app">
     <v-toolbar absolute scroll-off-screen class="primary">
       <v-toolbar-title v-html="app.name"></v-toolbar-title>
-      <v-spacer></v-spacer>
-      <v-btn icon v-on:click="reload()" class="fab" v-bind:loading="loading.reload">
-        <v-icon>loop</v-icon>
+      <v-btn icon :loading="loading.reload" v-on:click="reload()">
+        <v-icon>refresh</v-icon>
       </v-btn>
-      <router-link to="/leaderboard" class="btn btn--raised"><div class="btn__content white--text">Leaderboard</div></router-link>
+      <v-spacer></v-spacer>
+      <router-link to="/">
+        <v-btn icon>
+          <v-icon class="white--text">home</v-icon>
+        </v-btn>
+      </router-link>
+      <router-link to="/leaderboard" class="leaderboard-nav btn btn--raised btn--icon">
+          <div class="v-icon">
+            <img src="leaderboard.png"></img>
+          </div>
+      </router-link>
     </v-toolbar>
-    
+
     <router-view></router-view>
   </div>
 

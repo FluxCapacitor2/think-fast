@@ -11,5 +11,5 @@ $database = new Medoo([
 ]);
 $db = $database;
 
-echo json_encode($db->select('leaderboard', ['*']))
+echo json_encode($db->select('leaderboard', ['name', 'points']))
 ?>

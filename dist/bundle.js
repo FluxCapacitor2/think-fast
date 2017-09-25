@@ -60,79 +60,105 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 0);
+/******/ 	return __webpack_require__(__webpack_require__.s = 2);
 /******/ })
 /************************************************************************/
 /******/ ([
 /* 0 */
-/***/ (function(module, exports, __webpack_require__) {
+/***/ (function(module, exports) {
 
-"use strict";
+/* globals __VUE_SSR_CONTEXT__ */
 
+// this module is a runtime utility for cleaner component module output and will
+// be included in the final webpack user bundle
 
-var _vue = __webpack_require__(1);
+module.exports = function normalizeComponent (
+  rawScriptExports,
+  compiledTemplate,
+  injectStyles,
+  scopeId,
+  moduleIdentifier /* server only */
+) {
+  var esModule
+  var scriptExports = rawScriptExports = rawScriptExports || {}
 
-var _vue2 = _interopRequireDefault(_vue);
+  // ES6 modules interop
+  var type = typeof rawScriptExports.default
+  if (type === 'object' || type === 'function') {
+    esModule = rawScriptExports
+    scriptExports = rawScriptExports.default
+  }
 
-var _vueRouter = __webpack_require__(3);
+  // Vue.extend constructor export interop
+  var options = typeof scriptExports === 'function'
+    ? scriptExports.options
+    : scriptExports
 
-var _vueRouter2 = _interopRequireDefault(_vueRouter);
+  // render functions
+  if (compiledTemplate) {
+    options.render = compiledTemplate.render
+    options.staticRenderFns = compiledTemplate.staticRenderFns
+  }
 
-var _vuetify = __webpack_require__(5);
+  // scopedId
+  if (scopeId) {
+    options._scopeId = scopeId
+  }
 
-var _vuetify2 = _interopRequireDefault(_vuetify);
-
-var _bounce = __webpack_require__(6);
-
-var _bounce2 = _interopRequireDefault(_bounce);
-
-var _app = __webpack_require__(7);
-
-var _app2 = _interopRequireDefault(_app);
-
-var _leaderboard = __webpack_require__(17);
-
-var _leaderboard2 = _interopRequireDefault(_leaderboard);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-_vue2.default.use(_vuetify2.default);
-_vue2.default.use(_vueRouter2.default);
-
-__webpack_require__(11);
-
-var routes = [{ path: '/', component: _app2.default }, { path: '/leaderboard', component: _leaderboard2.default }];
-
-var router = new _vueRouter2.default({
-  mode: 'hash',
-  routes: routes
-});
-
-var v = new _vue2.default({
-  router: router,
-  el: '#app',
-  data: {
-    window: window,
-    app: {
-      name: '<span class="think-fast">ThinkFast!</span>'
-    }, loading: {
-      reload: false
+  var hook
+  if (moduleIdentifier) { // server build
+    hook = function (context) {
+      // 2.3 injection
+      context =
+        context || // cached call
+        (this.$vnode && this.$vnode.ssrContext) || // stateful
+        (this.parent && this.parent.$vnode && this.parent.$vnode.ssrContext) // functional
+      // 2.2 with runInNewContext: true
+      if (!context && typeof __VUE_SSR_CONTEXT__ !== 'undefined') {
+        context = __VUE_SSR_CONTEXT__
+      }
+      // inject component styles
+      if (injectStyles) {
+        injectStyles.call(this, context)
+      }
+      // register component module identifier for async chunk inferrence
+      if (context && context._registeredComponents) {
+        context._registeredComponents.add(moduleIdentifier)
+      }
     }
-  }, methods: {
-    reload: function reload() {
-      this.loading.reload = true;
-      window.location.reload(false); //Reload from the cache: might save some time because network is slow
+    // used by ssr in case component is cached and beforeCreate
+    // never gets called
+    options._ssrRegister = hook
+  } else if (injectStyles) {
+    hook = injectStyles
+  }
+
+  if (hook) {
+    var functional = options.functional
+    var existing = functional
+      ? options.render
+      : options.beforeCreate
+    if (!functional) {
+      // inject component registration as beforeCreate hook
+      options.beforeCreate = existing
+        ? [].concat(existing, hook)
+        : [hook]
+    } else {
+      // register for functioal component in vue file
+      options.render = function renderWithStyleInjection (h, context) {
+        hook.call(context)
+        return existing(h, context)
+      }
     }
   }
-});
 
-var b = new _bounce2.default().scale({
-  from: { x: 1, y: 1 },
-  to: { x: 3, y: 3 }
-}).translate({
-  from: { x: 0, y: 0 },
-  to: { x: 0, y: 50 }
-}).define('bounce-pulse');
+  return {
+    esModule: esModule,
+    exports: scriptExports,
+    options: options
+  }
+}
+
 
 /***/ }),
 /* 1 */
@@ -10322,10 +10348,85 @@ return Vue$3;
 
 })));
 
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(2)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(3)))
 
 /***/ }),
 /* 2 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var _vue = __webpack_require__(1);
+
+var _vue2 = _interopRequireDefault(_vue);
+
+var _vueRouter = __webpack_require__(4);
+
+var _vueRouter2 = _interopRequireDefault(_vueRouter);
+
+var _vuetify = __webpack_require__(6);
+
+var _vuetify2 = _interopRequireDefault(_vuetify);
+
+var _bounce = __webpack_require__(7);
+
+var _bounce2 = _interopRequireDefault(_bounce);
+
+var _app = __webpack_require__(8);
+
+var _app2 = _interopRequireDefault(_app);
+
+var _leaderboard = __webpack_require__(12);
+
+var _leaderboard2 = _interopRequireDefault(_leaderboard);
+
+var _gameOver = __webpack_require__(20);
+
+var _gameOver2 = _interopRequireDefault(_gameOver);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+_vue2.default.use(_vuetify2.default);
+_vue2.default.use(_vueRouter2.default);
+
+__webpack_require__(23);
+
+var routes = [{ path: '/', component: _app2.default }, { path: '/leaderboard', component: _leaderboard2.default }, { path: '/gameover', component: _gameOver2.default }];
+
+var router = new _vueRouter2.default({
+  mode: 'hash',
+  routes: routes
+});
+
+var v = new _vue2.default({
+  router: router,
+  el: '#app',
+  data: {
+    window: window,
+    app: {
+      name: '<span class="think-fast">ThinkFast!</span>'
+    }, loading: {
+      reload: false
+    }
+  }, methods: {
+    reload: function reload() {
+      this.loading.reload = true;
+      window.location.reload(true);
+    }
+  }
+});
+
+var b = new _bounce2.default().scale({
+  from: { x: 1.2, y: 1.5 },
+  to: { x: 3, y: 3 }
+}).translate({
+  from: { x: 0, y: 0 },
+  to: { x: 0, y: 25 }
+}).define('bounce-pulse');
+
+/***/ }),
+/* 3 */
 /***/ (function(module, exports) {
 
 var g;
@@ -10352,7 +10453,7 @@ module.exports = g;
 
 
 /***/ }),
-/* 3 */
+/* 4 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -12863,10 +12964,10 @@ if (inBrowser && window.Vue) {
 
 /* harmony default export */ __webpack_exports__["default"] = (VueRouter);
 
-/* WEBPACK VAR INJECTION */}.call(__webpack_exports__, __webpack_require__(4)))
+/* WEBPACK VAR INJECTION */}.call(__webpack_exports__, __webpack_require__(5)))
 
 /***/ }),
-/* 4 */
+/* 5 */
 /***/ (function(module, exports) {
 
 // shim for using process in browser
@@ -13056,7 +13157,7 @@ process.umask = function() { return 0; };
 
 
 /***/ }),
-/* 5 */
+/* 6 */
 /***/ (function(module, exports, __webpack_require__) {
 
 (function webpackUniversalModuleDefinition(root, factory) {
@@ -28290,7 +28391,7 @@ function unbind(el) {
 //# sourceMappingURL=vuetify.js.map
 
 /***/ }),
-/* 6 */
+/* 7 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var require;var require;/**
@@ -29332,15 +29433,15 @@ module.exports = Vector2D;
 });
 
 /***/ }),
-/* 7 */
+/* 8 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__babel_loader_node_modules_vue_loader_lib_selector_type_script_index_0_app_vue__ = __webpack_require__(9);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__node_modules_vue_loader_lib_template_compiler_index_id_data_v_a1198066_hasScoped_false_node_modules_vue_loader_lib_selector_type_template_index_0_app_vue__ = __webpack_require__(10);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__node_modules_vue_loader_lib_template_compiler_index_id_data_v_6ec2be08_hasScoped_false_node_modules_vue_loader_lib_selector_type_template_index_0_app_vue__ = __webpack_require__(11);
 var disposed = false
-var normalizeComponent = __webpack_require__(8)
+var normalizeComponent = __webpack_require__(0)
 /* script */
 
 /* template */
@@ -29353,7 +29454,7 @@ var __vue_scopeId__ = null
 var __vue_module_identifier__ = null
 var Component = normalizeComponent(
   __WEBPACK_IMPORTED_MODULE_0__babel_loader_node_modules_vue_loader_lib_selector_type_script_index_0_app_vue__["a" /* default */],
-  __WEBPACK_IMPORTED_MODULE_1__node_modules_vue_loader_lib_template_compiler_index_id_data_v_a1198066_hasScoped_false_node_modules_vue_loader_lib_selector_type_template_index_0_app_vue__["a" /* default */],
+  __WEBPACK_IMPORTED_MODULE_1__node_modules_vue_loader_lib_template_compiler_index_id_data_v_6ec2be08_hasScoped_false_node_modules_vue_loader_lib_selector_type_template_index_0_app_vue__["a" /* default */],
   __vue_styles__,
   __vue_scopeId__,
   __vue_module_identifier__
@@ -29369,9 +29470,9 @@ if (false) {(function () {
   if (!hotAPI.compatible) return
   module.hot.accept()
   if (!module.hot.data) {
-    hotAPI.createRecord("data-v-a1198066", Component.options)
+    hotAPI.createRecord("data-v-6ec2be08", Component.options)
   } else {
-    hotAPI.reload("data-v-a1198066", Component.options)
+    hotAPI.reload("data-v-6ec2be08", Component.options)
   }
   module.hot.dispose(function (data) {
     disposed = true
@@ -29382,107 +29483,50 @@ if (false) {(function () {
 
 
 /***/ }),
-/* 8 */
-/***/ (function(module, exports) {
-
-/* globals __VUE_SSR_CONTEXT__ */
-
-// this module is a runtime utility for cleaner component module output and will
-// be included in the final webpack user bundle
-
-module.exports = function normalizeComponent (
-  rawScriptExports,
-  compiledTemplate,
-  injectStyles,
-  scopeId,
-  moduleIdentifier /* server only */
-) {
-  var esModule
-  var scriptExports = rawScriptExports = rawScriptExports || {}
-
-  // ES6 modules interop
-  var type = typeof rawScriptExports.default
-  if (type === 'object' || type === 'function') {
-    esModule = rawScriptExports
-    scriptExports = rawScriptExports.default
-  }
-
-  // Vue.extend constructor export interop
-  var options = typeof scriptExports === 'function'
-    ? scriptExports.options
-    : scriptExports
-
-  // render functions
-  if (compiledTemplate) {
-    options.render = compiledTemplate.render
-    options.staticRenderFns = compiledTemplate.staticRenderFns
-  }
-
-  // scopedId
-  if (scopeId) {
-    options._scopeId = scopeId
-  }
-
-  var hook
-  if (moduleIdentifier) { // server build
-    hook = function (context) {
-      // 2.3 injection
-      context =
-        context || // cached call
-        (this.$vnode && this.$vnode.ssrContext) || // stateful
-        (this.parent && this.parent.$vnode && this.parent.$vnode.ssrContext) // functional
-      // 2.2 with runInNewContext: true
-      if (!context && typeof __VUE_SSR_CONTEXT__ !== 'undefined') {
-        context = __VUE_SSR_CONTEXT__
-      }
-      // inject component styles
-      if (injectStyles) {
-        injectStyles.call(this, context)
-      }
-      // register component module identifier for async chunk inferrence
-      if (context && context._registeredComponents) {
-        context._registeredComponents.add(moduleIdentifier)
-      }
-    }
-    // used by ssr in case component is cached and beforeCreate
-    // never gets called
-    options._ssrRegister = hook
-  } else if (injectStyles) {
-    hook = injectStyles
-  }
-
-  if (hook) {
-    var functional = options.functional
-    var existing = functional
-      ? options.render
-      : options.beforeCreate
-    if (!functional) {
-      // inject component registration as beforeCreate hook
-      options.beforeCreate = existing
-        ? [].concat(existing, hook)
-        : [hook]
-    } else {
-      // register for functioal component in vue file
-      options.render = function renderWithStyleInjection (h, context) {
-        hook.call(context)
-        return existing(h, context)
-      }
-    }
-  }
-
-  return {
-    esModule: esModule,
-    exports: scriptExports,
-    options: options
-  }
-}
-
-
-/***/ }),
 /* 9 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vue_focus__ = __webpack_require__(10);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vue_focus___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_vue_focus__);
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -29490,22 +29534,185 @@ module.exports = function normalizeComponent (
 //
 //
 
+
+
+
+function shuffle(array) {
+  var currentIndex = array.length,
+      temporaryValue,
+      randomIndex;
+  // While there remain elements to shuffle...
+  while (0 !== currentIndex) {
+    // Pick a remaining element...
+    randomIndex = Math.floor(Math.random() * currentIndex);
+    currentIndex -= 1;
+    // And swap it with the current element.
+    temporaryValue = array[currentIndex];
+    array[currentIndex] = array[randomIndex];
+    array[randomIndex] = temporaryValue;
+  }
+  return array;
+}
+
+var start_points_total = 10000;
+var BG_OPACITY = 0.3;
+
 /* harmony default export */ __webpack_exports__["a"] = ({
+  directives: {
+    focus: __WEBPACK_IMPORTED_MODULE_0_vue_focus___default.a
+  },
   data() {
     return {
       /*Component Data*/
-      math: [{ problem: '\\frac{72}{9}', js: 72 / 9, current: true }, { problem: '\\frac{9}{3}', js: 9 / 3 }]
+      TOTAL_POINTS: start_points_total,
+      LOSE_POINTS_MS: 100,
+      LOSE_POINTS: 1,
+      LOST_PERCENT: 0,
+      FINAL_SCORE: 0,
+
+      PAUSED: false,
+      focus: false,
+
+      answerValidate: false, //For text field
+      answerStyles: {
+        backgroundColor: 'rgba(0, 0, 0, ' + BG_OPACITY + ')'
+      },
+
+      CORRECT_ANSWER: null,
+      CURRENT_ANSWER: '',
+      PROB_INDEX: -1,
+
+      flashThreshold: 33,
+      interval: undefined,
+
+      pointsTotal: start_points_total,
+      started: false,
+
+      DOM_EL: document.querySelector('#math-problem.active'), //Current math problem DOM Element
+
+      math: [{ problem: '\\frac{72}{9}', js: 72 / 9 }, { problem: '\\frac{9}{3}', js: 9 / 3 }, { problem: '15\\times(-9)', js: 15 * -9 }, { problem: '-23+78', js: -23 + 78 }, { problem: '-93\\times12', js: -93 * 12 }]
     };
-  }, mounted() {
+  }, created() {
+    //Shuffle the math problems
+    this.math = shuffle(this.math);
+
     //Loop through all math problems and render them with KaTeX
     for (var i = 0; i < this.math.length; i++) {
       this.math[i].problem = katex.renderToString(this.math[i].problem);
+    }
+  }, mounted() {
+    //When key is pressed, assume it is for the answer text field.
+    var that = this;
+    window.addEventListener('keypress', function (e) {
+      that.focus = true;
+      if (e.keyCode === 13) {
+        that.checkAnswer();
+      }
+      that.$refs.answerTextField.focus();
+    });
+  }, methods: {
+    startGame() {
+      this.started = true;
+      this.reset();
+    },
+    checkAnswer() {
+      if (this.CURRENT_ANSWER == this.CORRECT_ANSWER) {
+        this.FINAL_SCORE += this.pointsTotal;
+        this.reset(); //New problem
+      } else {
+        this.answerValidate = true; //Show error
+        this.CURRENT_ANSWER = '';
+      }
+    }, reset() {
+      this.PROB_INDEX++;
+      if (this.math[this.PROB_INDEX]) {
+        this.LOST_PERCENT = 100;
+        this.LOSE_POINTS = 1;
+        this.pointsTotal = start_points_total;
+        this.math[this.PROB_INDEX].current = true;
+        this.answerValidate = false;
+        if (this.math[this.PROB_INDEX - 1]) {
+          this.math[this.PROB_INDEX - 1].current = false;
+        }
+        this.CORRECT_ANSWER = this.math[this.PROB_INDEX].js;
+        this.CURRENT_ANSWER = ''; //Text field
+        clearInterval(this.interval);
+        this.init();
+      } else {
+        window.location.href = '#/game-over?score=' + this.FINAL_SCORE;
+      }
+    }, init() {
+      var that = this;
+      this.interval = setInterval(function () {
+        if (!that.PAUSED) {
+          //Allow pausing functionality
+          if (that.pointsTotal % 20 == 0) {
+            //Every 20 points lost, it gets faster.
+            that.LOSE_POINTS++;
+          }
+          that.LOST_PERCENT = that.pointsTotal / that.TOTAL_POINTS * 100; //Percent of points that you can get (updates constantly) (goes DOWN)
+          that.pointsTotal -= that.LOSE_POINTS;
+
+          if (that.pointsTotal <= 0) {
+            that.pointsTotal = 0;
+            clearInterval(that.interval);
+
+            console.log(that);
+            that.reset();
+          }
+        }
+      }, this.LOSE_POINTS_MS);
     }
   }
 });
 
 /***/ }),
 /* 10 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var Vue = __webpack_require__(1);
+Vue = 'default' in Vue ? Vue['default'] : Vue;
+
+var version = '2.1.0';
+
+var compatible = (/^2\./).test(Vue.version);
+if (!compatible) {
+  Vue.util.warn('VueFocus ' + version + ' only supports Vue 2.x, and does not support Vue ' + Vue.version);
+}
+
+var focus = {
+  inserted: function(el, binding) {
+    if (binding.value) el.focus();
+    else el.blur();
+  },
+
+  componentUpdated: function(el, binding) {
+    if (binding.modifiers.lazy) {
+      if (Boolean(binding.value) === Boolean(binding.oldValue)) {
+        return;
+      }
+    }
+
+    if (binding.value) el.focus();
+    else el.blur();
+  },
+};
+
+var mixin = {
+  directives: {
+    focus: focus,
+  },
+};
+
+exports.version = version;
+exports.focus = focus;
+exports.mixin = mixin;
+
+/***/ }),
+/* 11 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -29516,14 +29723,158 @@ var render = function() {
   return _c(
     "div",
     { attrs: { id: "math-container" } },
-    _vm._l(_vm.math, function(p) {
-      return _c("div", {
-        staticClass: "bounce-pulse",
-        class: { active: p.current },
-        attrs: { id: "math-problem" },
-        domProps: { innerHTML: _vm._s(p.problem) }
-      })
-    })
+    [
+      _c(
+        "v-btn",
+        {
+          attrs: { icon: "" },
+          on: {
+            click: function($event) {
+              _vm.PAUSED = !_vm.PAUSED
+            }
+          }
+        },
+        [
+          !_vm.PAUSED
+            ? _c("v-icon", [_vm._v("pause")])
+            : _c("v-icon", [_vm._v("play_arrow")])
+        ],
+        1
+      ),
+      _vm._v(" "),
+      !this.started
+        ? _c(
+            "v-btn",
+            {
+              attrs: { id: "game-start-btn", block: "" },
+              on: {
+                click: function($event) {
+                  _vm.startGame()
+                }
+              }
+            },
+            [_vm._v("START")]
+          )
+        : _c(
+            "div",
+            { attrs: { id: "math-game" } },
+            [
+              _vm._l(_vm.math, function(p) {
+                return _c("div", {
+                  staticClass: "bounce-pulse",
+                  class: { active: p.current },
+                  attrs: { id: "math-problem" },
+                  domProps: { innerHTML: _vm._s(p.problem) }
+                })
+              }),
+              _vm._v(" "),
+              _c(
+                "div",
+                { attrs: { id: "points-answer-container" } },
+                [
+                  _c("div", { attrs: { id: "total-points" } }, [
+                    _vm.pointsTotal > 0
+                      ? _c("span", [
+                          _vm._v(
+                            "Earn up to " + _vm._s(_vm.pointsTotal) + " points!"
+                          )
+                        ])
+                      : _c("span", [_vm._v("No points this time! :(")])
+                  ]),
+                  _vm._v(" "),
+                  _c("v-progress-linear", {
+                    staticStyle: { margin: "0" },
+                    attrs: {
+                      height: "5",
+                      warning:
+                        this.LOST_PERCENT < this.flashThreshold &&
+                        Math.round(this.LOST_PERCENT % 10) > 5 &&
+                        this.LOST_PERCENT > 0,
+                      error:
+                        this.LOST_PERCENT < this.flashThreshold &&
+                        Math.round(this.LOST_PERCENT % 10) <= 5 &&
+                        this.LOST_PERCENT > 0,
+                      secondary: this.LOST_PERCENT <= 0
+                    },
+                    model: {
+                      value: this.LOST_PERCENT,
+                      callback: function($$v) {
+                        this.LOST_PERCENT = $$v
+                      },
+                      expression: "this.LOST_PERCENT"
+                    }
+                  }),
+                  _vm._v(" "),
+                  _c(
+                    "div",
+                    { style: _vm.answerStyles, attrs: { id: "math-answer" } },
+                    [
+                      _c(
+                        "div",
+                        {
+                          ref: "answerTextField",
+                          attrs: { id: "answer-text-field" }
+                        },
+                        [
+                          _c("v-text-field", {
+                            directives: [
+                              {
+                                name: "focus",
+                                rawName: "v-focus",
+                                value: _vm.focus,
+                                expression: "focus"
+                              }
+                            ],
+                            attrs: {
+                              autofocus: "",
+                              placeholder: "Your answer...",
+                              error: this.answerValidate
+                            },
+                            on: {
+                              focus: function($event) {
+                                _vm.focus = true
+                              },
+                              blue: function($event) {
+                                _vm.focus = false
+                              }
+                            },
+                            model: {
+                              value: _vm.CURRENT_ANSWER,
+                              callback: function($$v) {
+                                _vm.CURRENT_ANSWER = $$v
+                              },
+                              expression: "CURRENT_ANSWER"
+                            }
+                          })
+                        ],
+                        1
+                      ),
+                      _vm._v(" "),
+                      _c(
+                        "v-btn",
+                        {
+                          ref: "checkBtn",
+                          attrs: { id: "check-btn", icon: "" },
+                          on: {
+                            click: function($event) {
+                              _vm.checkAnswer()
+                            }
+                          }
+                        },
+                        [_c("v-icon", [_vm._v("check")])],
+                        1
+                      )
+                    ],
+                    1
+                  )
+                ],
+                1
+              )
+            ],
+            2
+          )
+    ],
+    1
   )
 }
 var staticRenderFns = []
@@ -29533,19 +29884,106 @@ var esExports = { render: render, staticRenderFns: staticRenderFns }
 if (false) {
   module.hot.accept()
   if (module.hot.data) {
-     require("vue-hot-reload-api").rerender("data-v-a1198066", esExports)
+     require("vue-hot-reload-api").rerender("data-v-6ec2be08", esExports)
   }
 }
 
 /***/ }),
-/* 11 */
-/***/ (function(module, exports) {
+/* 12 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
 
-// removed by extract-text-webpack-plugin
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__babel_loader_node_modules_vue_loader_lib_selector_type_script_index_0_leaderboard_vue__ = __webpack_require__(18);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__node_modules_vue_loader_lib_template_compiler_index_id_data_v_281f5e64_hasScoped_false_node_modules_vue_loader_lib_selector_type_template_index_0_leaderboard_vue__ = __webpack_require__(19);
+var disposed = false
+function injectStyle (ssrContext) {
+  if (disposed) return
+  __webpack_require__(13)
+}
+var normalizeComponent = __webpack_require__(0)
+/* script */
+
+/* template */
+
+/* styles */
+var __vue_styles__ = injectStyle
+/* scopeId */
+var __vue_scopeId__ = null
+/* moduleIdentifier (server only) */
+var __vue_module_identifier__ = null
+var Component = normalizeComponent(
+  __WEBPACK_IMPORTED_MODULE_0__babel_loader_node_modules_vue_loader_lib_selector_type_script_index_0_leaderboard_vue__["a" /* default */],
+  __WEBPACK_IMPORTED_MODULE_1__node_modules_vue_loader_lib_template_compiler_index_id_data_v_281f5e64_hasScoped_false_node_modules_vue_loader_lib_selector_type_template_index_0_leaderboard_vue__["a" /* default */],
+  __vue_styles__,
+  __vue_scopeId__,
+  __vue_module_identifier__
+)
+Component.options.__file = "src\\components\\leaderboard.vue"
+if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key.substr(0, 2) !== "__"})) {console.error("named exports are not supported in *.vue files.")}
+if (Component.options.functional) {console.error("[vue-loader] leaderboard.vue: functional components are not supported with templates, they should use render functions.")}
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-281f5e64", Component.options)
+  } else {
+    hotAPI.reload("data-v-281f5e64", Component.options)
+  }
+  module.hot.dispose(function (data) {
+    disposed = true
+  })
+})()}
+
+/* harmony default export */ __webpack_exports__["default"] = (Component.exports);
+
 
 /***/ }),
-/* 12 */,
 /* 13 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// style-loader: Adds some css to the DOM by adding a <style> tag
+
+// load the styles
+var content = __webpack_require__(14);
+if(typeof content === 'string') content = [[module.i, content, '']];
+if(content.locals) module.exports = content.locals;
+// add the styles to the DOM
+var update = __webpack_require__(16)("17d336b1", content, false);
+// Hot Module Replacement
+if(false) {
+ // When the styles change, update the <style> tags
+ if(!content.locals) {
+   module.hot.accept("!!../../node_modules/css-loader/index.js!../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-281f5e64\",\"scoped\":false,\"hasInlineConfig\":false}!../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./leaderboard.vue", function() {
+     var newContent = require("!!../../node_modules/css-loader/index.js!../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-281f5e64\",\"scoped\":false,\"hasInlineConfig\":false}!../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./leaderboard.vue");
+     if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+     update(newContent);
+   });
+ }
+ // When the module is disposed, remove the <style> tags
+ module.hot.dispose(function() { update(); });
+}
+
+/***/ }),
+/* 14 */
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__(15)(undefined);
+// imports
+
+
+// module
+exports.push([module.i, "\nhr {\n  border: none;\n  border-bottom: 1.5px solid black;\n  padding: 10px;\n}\n.player-name {\n  text-align: center\n}\ndiv#leaderboard ul {\n  list-style-type: none;\n  font-size: 24px;\n}\nbody {\n  overflow: auto !important;\n}\n", ""]);
+
+// exports
+
+
+/***/ }),
+/* 15 */
 /***/ (function(module, exports) {
 
 /*
@@ -29627,194 +30065,7 @@ function toComment(sourceMap) {
 
 
 /***/ }),
-/* 14 */,
-/* 15 */,
-/* 16 */,
-/* 17 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__babel_loader_node_modules_vue_loader_lib_selector_type_script_index_0_leaderboard_vue__ = __webpack_require__(18);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__node_modules_vue_loader_lib_template_compiler_index_id_data_v_4d684b29_hasScoped_false_node_modules_vue_loader_lib_selector_type_template_index_0_leaderboard_vue__ = __webpack_require__(19);
-var disposed = false
-function injectStyle (ssrContext) {
-  if (disposed) return
-  __webpack_require__(20)
-}
-var normalizeComponent = __webpack_require__(8)
-/* script */
-
-/* template */
-
-/* styles */
-var __vue_styles__ = injectStyle
-/* scopeId */
-var __vue_scopeId__ = null
-/* moduleIdentifier (server only) */
-var __vue_module_identifier__ = null
-var Component = normalizeComponent(
-  __WEBPACK_IMPORTED_MODULE_0__babel_loader_node_modules_vue_loader_lib_selector_type_script_index_0_leaderboard_vue__["a" /* default */],
-  __WEBPACK_IMPORTED_MODULE_1__node_modules_vue_loader_lib_template_compiler_index_id_data_v_4d684b29_hasScoped_false_node_modules_vue_loader_lib_selector_type_template_index_0_leaderboard_vue__["a" /* default */],
-  __vue_styles__,
-  __vue_scopeId__,
-  __vue_module_identifier__
-)
-Component.options.__file = "src\\components\\leaderboard.vue"
-if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key.substr(0, 2) !== "__"})) {console.error("named exports are not supported in *.vue files.")}
-if (Component.options.functional) {console.error("[vue-loader] leaderboard.vue: functional components are not supported with templates, they should use render functions.")}
-
-/* hot reload */
-if (false) {(function () {
-  var hotAPI = require("vue-hot-reload-api")
-  hotAPI.install(require("vue"), false)
-  if (!hotAPI.compatible) return
-  module.hot.accept()
-  if (!module.hot.data) {
-    hotAPI.createRecord("data-v-4d684b29", Component.options)
-  } else {
-    hotAPI.reload("data-v-4d684b29", Component.options)
-  }
-  module.hot.dispose(function (data) {
-    disposed = true
-  })
-})()}
-
-/* harmony default export */ __webpack_exports__["default"] = (Component.exports);
-
-
-/***/ }),
-/* 18 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-
-function map(value, low1, high1, low2, high2) {
-  return low2 + (value - low1) * (high2 - low2) / (high1 - low1);
-}
-/* harmony default export */ __webpack_exports__["a"] = ({
-  data() {
-    return {
-      /*Component Data*/
-      color: '54, 106, 188',
-      leaderboard: [{ name: "Testing", score: 1200000 }, { name: "Is a nerd", score: 1190000 }, { name: "Testing", score: 1200000 }, { name: "Is a nerd", score: 1190000 }, { name: "Testing", score: 1200000 }, { name: "Is a nerd", score: 1190000 }, { name: "Testing", score: 1200000 }, { name: "Is a nerd", score: 1190000 }]
-    };
-  }, created() {
-    this.leaderboard.sort(function (a, b) {
-      return b.score - a.score;
-    });
-    var players = this.leaderboard.length;
-    var op;
-    for (var i = 0; i < players; i++) {
-      op = 0 - i + players;
-      this.leaderboard[i].rank = i + 1;
-      this.leaderboard[i].opacity = map(op, 0, players, 0, 1);
-      this.leaderboard[i].style = { backgroundColor: 'rgba(' + this.color + ', ' + this.leaderboard[i].opacity + ')' };
-      console.log(this.leaderboard[i].opacity);
-    }
-  }
-});
-
-/***/ }),
-/* 19 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-var render = function() {
-  var _vm = this
-  var _h = _vm.$createElement
-  var _c = _vm._self._c || _h
-  return _c("div", { attrs: { id: "leaderboard" } }, [
-    _c(
-      "ul",
-      _vm._l(_vm.leaderboard, function(player) {
-        return _c("div", { style: player.style }, [
-          _c("li", { staticClass: "player-name" }, [
-            _c("span", { staticClass: "left" }, [_vm._v(_vm._s(player.rank))]),
-            _vm._v(" "),
-            _c("span", { staticClass: "center" }, [
-              _vm._v(_vm._s(player.name))
-            ]),
-            _vm._v(" "),
-            _c("span", { staticClass: "right" }, [_vm._v(_vm._s(player.score))])
-          ]),
-          _vm._v(" "),
-          _c("hr")
-        ])
-      })
-    )
-  ])
-}
-var staticRenderFns = []
-render._withStripped = true
-var esExports = { render: render, staticRenderFns: staticRenderFns }
-/* harmony default export */ __webpack_exports__["a"] = (esExports);
-if (false) {
-  module.hot.accept()
-  if (module.hot.data) {
-     require("vue-hot-reload-api").rerender("data-v-4d684b29", esExports)
-  }
-}
-
-/***/ }),
-/* 20 */
-/***/ (function(module, exports, __webpack_require__) {
-
-// style-loader: Adds some css to the DOM by adding a <style> tag
-
-// load the styles
-var content = __webpack_require__(21);
-if(typeof content === 'string') content = [[module.i, content, '']];
-if(content.locals) module.exports = content.locals;
-// add the styles to the DOM
-var update = __webpack_require__(22)("1ed1a99a", content, false);
-// Hot Module Replacement
-if(false) {
- // When the styles change, update the <style> tags
- if(!content.locals) {
-   module.hot.accept("!!../../node_modules/css-loader/index.js!../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-4d684b29\",\"scoped\":false,\"hasInlineConfig\":false}!../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./leaderboard.vue", function() {
-     var newContent = require("!!../../node_modules/css-loader/index.js!../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-4d684b29\",\"scoped\":false,\"hasInlineConfig\":false}!../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./leaderboard.vue");
-     if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
-     update(newContent);
-   });
- }
- // When the module is disposed, remove the <style> tags
- module.hot.dispose(function() { update(); });
-}
-
-/***/ }),
-/* 21 */
-/***/ (function(module, exports, __webpack_require__) {
-
-exports = module.exports = __webpack_require__(13)(undefined);
-// imports
-
-
-// module
-exports.push([module.i, "\nhr {\n  border: none;\n  border-bottom: 1.5px solid black;\n  padding: 10px;\n}\n.player-name {\n  text-align: center\n}\ndiv#leaderboard ul {\n  list-style-type: none;\n  font-size: 24px;\n}\n", ""]);
-
-// exports
-
-
-/***/ }),
-/* 22 */
+/* 16 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /*
@@ -29833,7 +30084,7 @@ if (typeof DEBUG !== 'undefined' && DEBUG) {
   ) }
 }
 
-var listToStyles = __webpack_require__(23)
+var listToStyles = __webpack_require__(17)
 
 /*
 type StyleObject = {
@@ -30035,7 +30286,7 @@ function applyToTag (styleElement, obj) {
 
 
 /***/ }),
-/* 23 */
+/* 17 */
 /***/ (function(module, exports) {
 
 /**
@@ -30066,6 +30317,208 @@ module.exports = function listToStyles (parentId, list) {
   return styles
 }
 
+
+/***/ }),
+/* 18 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+function map(value, low1, high1, low2, high2) {
+  return low2 + (value - low1) * (high2 - low2) / (high1 - low1);
+}
+/* harmony default export */ __webpack_exports__["a"] = ({
+  data() {
+    return {
+      /*Component Data*/
+      color: '255, 255, 255', //   54, 106, 188
+      leaderboard: [{ name: "Testing", score: 1200000 }, { name: "Is a nerd", score: 1190000 }, { name: "Testing", score: 1200000 }, { name: "Is a nerd", score: 1190000 }, { name: "Testing", score: 1200000 }, { name: "Is a nerd", score: 1190000 }, { name: "Testing", score: 1200000 }, { name: "Is a nerd", score: 1190000 }]
+    };
+  }, created() {
+    this.leaderboard.sort(function (a, b) {
+      return b.score - a.score;
+    });
+    var players = this.leaderboard.length;
+    var op;
+    for (var i = 0; i < players; i++) {
+      op = 0 - i + players;
+      this.leaderboard[i].rank = i + 1;
+      this.leaderboard[i].opacity = map(op, 0, players, 0, 1);
+      this.leaderboard[i].style = { backgroundColor: 'rgba(' + this.color + ', ' + this.leaderboard[i].opacity + ')' };
+    }
+  }
+});
+
+/***/ }),
+/* 19 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c("div", { attrs: { id: "leaderboard" } }, [
+    _c(
+      "ul",
+      _vm._l(_vm.leaderboard, function(player) {
+        return _c("div", { style: player.style }, [
+          _c("li", { staticClass: "player-name" }, [
+            _c("span", { staticClass: "left" }, [_vm._v(_vm._s(player.rank))]),
+            _vm._v(" "),
+            _c("span", { staticClass: "center" }, [
+              _vm._v(_vm._s(player.name))
+            ]),
+            _vm._v(" "),
+            _c("span", { staticClass: "right" }, [_vm._v(_vm._s(player.score))])
+          ]),
+          _vm._v(" "),
+          _c("hr")
+        ])
+      })
+    )
+  ])
+}
+var staticRenderFns = []
+render._withStripped = true
+var esExports = { render: render, staticRenderFns: staticRenderFns }
+/* harmony default export */ __webpack_exports__["a"] = (esExports);
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+     require("vue-hot-reload-api").rerender("data-v-281f5e64", esExports)
+  }
+}
+
+/***/ }),
+/* 20 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__babel_loader_node_modules_vue_loader_lib_selector_type_script_index_0_game_over_vue__ = __webpack_require__(21);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__node_modules_vue_loader_lib_template_compiler_index_id_data_v_8732c114_hasScoped_false_node_modules_vue_loader_lib_selector_type_template_index_0_game_over_vue__ = __webpack_require__(22);
+var disposed = false
+var normalizeComponent = __webpack_require__(0)
+/* script */
+
+/* template */
+
+/* styles */
+var __vue_styles__ = null
+/* scopeId */
+var __vue_scopeId__ = null
+/* moduleIdentifier (server only) */
+var __vue_module_identifier__ = null
+var Component = normalizeComponent(
+  __WEBPACK_IMPORTED_MODULE_0__babel_loader_node_modules_vue_loader_lib_selector_type_script_index_0_game_over_vue__["a" /* default */],
+  __WEBPACK_IMPORTED_MODULE_1__node_modules_vue_loader_lib_template_compiler_index_id_data_v_8732c114_hasScoped_false_node_modules_vue_loader_lib_selector_type_template_index_0_game_over_vue__["a" /* default */],
+  __vue_styles__,
+  __vue_scopeId__,
+  __vue_module_identifier__
+)
+Component.options.__file = "src\\components\\game-over.vue"
+if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key.substr(0, 2) !== "__"})) {console.error("named exports are not supported in *.vue files.")}
+if (Component.options.functional) {console.error("[vue-loader] game-over.vue: functional components are not supported with templates, they should use render functions.")}
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-8732c114", Component.options)
+  } else {
+    hotAPI.reload("data-v-8732c114", Component.options)
+  }
+  module.hot.dispose(function (data) {
+    disposed = true
+  })
+})()}
+
+/* harmony default export */ __webpack_exports__["default"] = (Component.exports);
+
+
+/***/ }),
+/* 21 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+
+var msgs = ['Nice job!', 'Well done!', 'Great work!', 'You made it!'];
+
+/* harmony default export */ __webpack_exports__["a"] = ({
+  props: ['points'],
+  data() {
+    return {
+      /*Component Data*/
+      //points: this.props.points,
+      msg: msgs[Math.floor(Math.random() * msgs.length)]
+    };
+  }
+});
+
+/***/ }),
+/* 22 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c("div", { attrs: { id: "game-over" } }, [
+    _c("h1", [_vm._v("Game over!")]),
+    _vm._v(" "),
+    _c("h4", [_vm._v(_vm._s(_vm.msg))]),
+    _vm._v(" "),
+    _c("p")
+  ])
+}
+var staticRenderFns = []
+render._withStripped = true
+var esExports = { render: render, staticRenderFns: staticRenderFns }
+/* harmony default export */ __webpack_exports__["a"] = (esExports);
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+     require("vue-hot-reload-api").rerender("data-v-8732c114", esExports)
+  }
+}
+
+/***/ }),
+/* 23 */
+/***/ (function(module, exports) {
+
+// removed by extract-text-webpack-plugin
 
 /***/ })
 /******/ ]);

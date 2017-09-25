@@ -5,6 +5,7 @@ import Bounce from 'bounce.js';
 
 import App from 'components/app.vue';
 import Leaderboard from 'components/leaderboard.vue';
+import GameOver from 'components/game-over.vue';
 
 Vue.use(Vuetify);
 Vue.use(VueRouter);
@@ -13,7 +14,8 @@ require('./style.sass');
 
 const routes = [
   {path: '/', component: App},
-  {path: '/leaderboard', component: Leaderboard}
+  {path: '/leaderboard', component: Leaderboard},
+  {path: '/gameover', component: GameOver}
 ]
 
 const router = new VueRouter({
@@ -34,18 +36,18 @@ const v = new Vue({
   }, methods: {
     reload() {
       this.loading.reload = true;
-      window.location.reload(false); //Reload from the cache: might save some time because network is slow
+      window.location.reload(true);
     }
   }
 });
 
 var b = new Bounce()
 .scale({
-  from: {x:1, y:1},
+  from: {x:1.2, y:1.5},
   to: {x:3,y:3}
 })
 .translate({
   from: {x:0,y:0},
-  to: {x:0,y:50}
+  to: {x:0,y:25}
 })
 .define('bounce-pulse');

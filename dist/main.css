@@ -96,8 +96,8 @@ body {
 .bounce-pulse {
   -webkit-animation-name: bounce-pulse;
           animation-name: bounce-pulse;
-  -webkit-animation-duration: 750ms;
-          animation-duration: 750ms;
+  -webkit-animation-duration: 1s;
+          animation-duration: 1s;
   -webkit-animation-timing-function: linear;
           animation-timing-function: linear;
   -webkit-animation-iteration-count: infinite;
@@ -123,9 +123,29 @@ div#math-problem {
 div#math-container {
   background-color: transparent !important; }
 
+div#points-answer-container {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  margin: 0;
+  width: 100%; }
+
+div#math-answer {
+  background-color: rgba(0, 0, 0, 0.3);
+  padding: 100px; }
+  div#math-answer #answer-text-field {
+    width: 85%;
+    float: left; }
+  div#math-answer #check-btn {
+    float: right; }
+
 span.katex {
   font-family: Roboto, Helvecita, KaTeX_Main, sans-serif;
   font-size: 300%; }
 
 ::-webkit-scrollbar {
   display: none; }
+
+.leaderboard-nav img {
+  width: 70%;
+  height: 70%; }

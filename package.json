@@ -27,6 +27,7 @@
   "dependencies": {
     "bounce.js": "^0.8.2",
     "vue": "^2.4.4",
+    "vue-focus": "^2.1.0",
     "vue-router": "^2.7.0",
     "vuetify": "^0.15.7"
   }
