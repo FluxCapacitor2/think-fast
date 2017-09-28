@@ -60,7 +60,7 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 2);
+/******/ 	return __webpack_require__(__webpack_require__.s = 1);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -162,6 +162,81 @@ module.exports = function normalizeComponent (
 
 /***/ }),
 /* 1 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var _vue = __webpack_require__(2);
+
+var _vue2 = _interopRequireDefault(_vue);
+
+var _vueRouter = __webpack_require__(4);
+
+var _vueRouter2 = _interopRequireDefault(_vueRouter);
+
+var _vuetify = __webpack_require__(5);
+
+var _vuetify2 = _interopRequireDefault(_vuetify);
+
+var _bounce = __webpack_require__(6);
+
+var _bounce2 = _interopRequireDefault(_bounce);
+
+var _app = __webpack_require__(7);
+
+var _app2 = _interopRequireDefault(_app);
+
+var _leaderboard = __webpack_require__(10);
+
+var _leaderboard2 = _interopRequireDefault(_leaderboard);
+
+var _gameOver = __webpack_require__(18);
+
+var _gameOver2 = _interopRequireDefault(_gameOver);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+_vue2.default.use(_vuetify2.default);
+_vue2.default.use(_vueRouter2.default);
+
+__webpack_require__(21);
+
+var routes = [{ path: '/', component: _app2.default }, { path: '/leaderboard', component: _leaderboard2.default }, { path: '*', component: _app2.default }];
+
+var router = new _vueRouter2.default({
+  mode: 'hash',
+  routes: routes
+});
+
+var v = new _vue2.default({
+  router: router,
+  el: '#app',
+  data: {
+    window: window,
+    app: {
+      name: '<span class="think-fast">ThinkFast!</span>'
+    }, loading: {
+      reload: false
+    }
+  }, methods: {
+    reload: function reload() {
+      this.loading.reload = true;
+      window.location.reload(true);
+    }
+  }
+});
+
+var b = new _bounce2.default().scale({
+  from: { x: 1.2, y: 1.5 },
+  to: { x: 3, y: 3 }
+}).translate({
+  from: { x: 0, y: 0 },
+  to: { x: 0, y: 25 }
+}).define('bounce-pulse');
+
+/***/ }),
+/* 2 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(global) {/*!
@@ -10351,81 +10426,6 @@ return Vue$3;
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(3)))
 
 /***/ }),
-/* 2 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-var _vue = __webpack_require__(1);
-
-var _vue2 = _interopRequireDefault(_vue);
-
-var _vueRouter = __webpack_require__(4);
-
-var _vueRouter2 = _interopRequireDefault(_vueRouter);
-
-var _vuetify = __webpack_require__(6);
-
-var _vuetify2 = _interopRequireDefault(_vuetify);
-
-var _bounce = __webpack_require__(7);
-
-var _bounce2 = _interopRequireDefault(_bounce);
-
-var _app = __webpack_require__(8);
-
-var _app2 = _interopRequireDefault(_app);
-
-var _leaderboard = __webpack_require__(12);
-
-var _leaderboard2 = _interopRequireDefault(_leaderboard);
-
-var _gameOver = __webpack_require__(20);
-
-var _gameOver2 = _interopRequireDefault(_gameOver);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-_vue2.default.use(_vuetify2.default);
-_vue2.default.use(_vueRouter2.default);
-
-__webpack_require__(23);
-
-var routes = [{ path: '/', component: _app2.default }, { path: '/leaderboard', component: _leaderboard2.default }, { path: '/gameover', component: _gameOver2.default }];
-
-var router = new _vueRouter2.default({
-  mode: 'hash',
-  routes: routes
-});
-
-var v = new _vue2.default({
-  router: router,
-  el: '#app',
-  data: {
-    window: window,
-    app: {
-      name: '<span class="think-fast">ThinkFast!</span>'
-    }, loading: {
-      reload: false
-    }
-  }, methods: {
-    reload: function reload() {
-      this.loading.reload = true;
-      window.location.reload(true);
-    }
-  }
-});
-
-var b = new _bounce2.default().scale({
-  from: { x: 1.2, y: 1.5 },
-  to: { x: 3, y: 3 }
-}).translate({
-  from: { x: 0, y: 0 },
-  to: { x: 0, y: 25 }
-}).define('bounce-pulse');
-
-/***/ }),
 /* 3 */
 /***/ (function(module, exports) {
 
@@ -10458,7 +10458,7 @@ module.exports = g;
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* WEBPACK VAR INJECTION */(function(process) {/**
+/**
   * vue-router v2.7.0
   * (c) 2017 Evan You
   * @license MIT
@@ -10472,7 +10472,7 @@ function assert (condition, message) {
 }
 
 function warn (condition, message) {
-  if (process.env.NODE_ENV !== 'production' && !condition) {
+  if (false) {
     typeof console !== 'undefined' && console.warn(("[vue-router] " + message));
   }
 }
@@ -10571,7 +10571,7 @@ function resolveProps (route, config) {
     case 'boolean':
       return config ? route.params : undefined
     default:
-      if (process.env.NODE_ENV !== 'production') {
+      if (false) {
         warn(
           false,
           "props in \"" + (route.path) + "\" is a " + (typeof config) + ", " +
@@ -10608,7 +10608,7 @@ function resolveQuery (
   try {
     parsedQuery = parse(query || '');
   } catch (e) {
-    process.env.NODE_ENV !== 'production' && warn(false, e.message);
+    "production" !== 'production' && warn(false, e.message);
     parsedQuery = {};
   }
   for (var key in extraQuery) {
@@ -11509,7 +11509,7 @@ function fillParams (
       (regexpCompileCache[path] = index.compile(path));
     return filler(params || {}, { pretty: true })
   } catch (e) {
-    if (process.env.NODE_ENV !== 'production') {
+    if (false) {
       warn(false, ("missing param for " + routeMsg + ": " + (e.message)));
     }
     return ''
@@ -11559,7 +11559,7 @@ function addRouteRecord (
 ) {
   var path = route.path;
   var name = route.name;
-  if (process.env.NODE_ENV !== 'production') {
+  if (false) {
     assert(path != null, "\"path\" is required in a route configuration.");
     assert(
       typeof route.component !== 'string',
@@ -11597,7 +11597,7 @@ function addRouteRecord (
     // Warn if route is named, does not redirect and has a default child route.
     // If users navigate to this route by name, the default child will
     // not be rendered (GH Issue #629)
-    if (process.env.NODE_ENV !== 'production') {
+    if (false) {
       if (route.name && !route.redirect && route.children.some(function (child) { return /^\/?$/.test(child.path); })) {
         warn(
           false,
@@ -11646,7 +11646,7 @@ function addRouteRecord (
   if (name) {
     if (!nameMap[name]) {
       nameMap[name] = record;
-    } else if (process.env.NODE_ENV !== 'production' && !matchAs) {
+    } else if (false) {
       warn(
         false,
         "Duplicate named routes definition: " +
@@ -11658,7 +11658,7 @@ function addRouteRecord (
 
 function compileRouteRegex (path, pathToRegexpOptions) {
   var regex = index(path, [], pathToRegexpOptions);
-  if (process.env.NODE_ENV !== 'production') {
+  if (false) {
     var keys = {};
     regex.keys.forEach(function (key) {
       warn(!keys[key.name], ("Duplicate param keys in route with path: \"" + path + "\""));
@@ -11701,7 +11701,7 @@ function normalizeLocation (
     } else if (current.matched.length) {
       var rawPath = current.matched[current.matched.length - 1].path;
       next.path = fillParams(rawPath, params, ("path " + (current.path)));
-    } else if (process.env.NODE_ENV !== 'production') {
+    } else if (false) {
       warn(false, "relative params navigation requires a current route.");
     }
     return next
@@ -11765,7 +11765,7 @@ function createMatcher (
 
     if (name) {
       var record = nameMap[name];
-      if (process.env.NODE_ENV !== 'production') {
+      if (false) {
         warn(record, ("Route with name '" + name + "' does not exist"));
       }
       if (!record) { return _createRoute(null, location) }
@@ -11817,7 +11817,7 @@ function createMatcher (
     }
 
     if (!redirect || typeof redirect !== 'object') {
-      if (process.env.NODE_ENV !== 'production') {
+      if (false) {
         warn(
           false, ("invalid redirect option: " + (JSON.stringify(redirect)))
         );
@@ -11838,7 +11838,7 @@ function createMatcher (
     if (name) {
       // resolved named direct
       var targetRecord = nameMap[name];
-      if (process.env.NODE_ENV !== 'production') {
+      if (false) {
         assert(targetRecord, ("redirect failed: named route \"" + name + "\" not found."));
       }
       return match({
@@ -11861,7 +11861,7 @@ function createMatcher (
         hash: hash
       }, undefined, location)
     } else {
-      if (process.env.NODE_ENV !== 'production') {
+      if (false) {
         warn(false, ("invalid redirect option: " + (JSON.stringify(redirect))));
       }
       return _createRoute(null, location)
@@ -11964,7 +11964,7 @@ function handleScroll (
     return
   }
 
-  if (process.env.NODE_ENV !== 'production') {
+  if (false) {
     assert(typeof behavior === 'function', "scrollBehavior must be a function");
   }
 
@@ -12155,7 +12155,7 @@ function resolveAsyncComponents (matched) {
 
         var reject = once(function (reason) {
           var msg = "Failed to resolve async component " + key + ": " + reason;
-          process.env.NODE_ENV !== 'production' && warn(false, msg);
+          "production" !== 'production' && warn(false, msg);
           if (!error) {
             error = isError(reason)
               ? reason
@@ -12792,7 +12792,7 @@ var VueRouter = function VueRouter (options) {
       this.history = new AbstractHistory(this, options.base);
       break
     default:
-      if (process.env.NODE_ENV !== 'production') {
+      if (false) {
         assert(false, ("invalid mode: " + mode));
       }
   }
@@ -12815,7 +12815,7 @@ prototypeAccessors.currentRoute.get = function () {
 VueRouter.prototype.init = function init (app /* Vue component instance */) {
     var this$1 = this;
 
-  process.env.NODE_ENV !== 'production' && assert(
+  "production" !== 'production' && assert(
     install.installed,
     "not installed. Make sure to call `Vue.use(VueRouter)` " +
     "before creating root instance."
@@ -12964,200 +12964,9 @@ if (inBrowser && window.Vue) {
 
 /* harmony default export */ __webpack_exports__["default"] = (VueRouter);
 
-/* WEBPACK VAR INJECTION */}.call(__webpack_exports__, __webpack_require__(5)))
 
 /***/ }),
 /* 5 */
-/***/ (function(module, exports) {
-
-// shim for using process in browser
-var process = module.exports = {};
-
-// cached from whatever global is present so that test runners that stub it
-// don't break things.  But we need to wrap it in a try catch in case it is
-// wrapped in strict mode code which doesn't define any globals.  It's inside a
-// function because try/catches deoptimize in certain engines.
-
-var cachedSetTimeout;
-var cachedClearTimeout;
-
-function defaultSetTimout() {
-    throw new Error('setTimeout has not been defined');
-}
-function defaultClearTimeout () {
-    throw new Error('clearTimeout has not been defined');
-}
-(function () {
-    try {
-        if (typeof setTimeout === 'function') {
-            cachedSetTimeout = setTimeout;
-        } else {
-            cachedSetTimeout = defaultSetTimout;
-        }
-    } catch (e) {
-        cachedSetTimeout = defaultSetTimout;
-    }
-    try {
-        if (typeof clearTimeout === 'function') {
-            cachedClearTimeout = clearTimeout;
-        } else {
-            cachedClearTimeout = defaultClearTimeout;
-        }
-    } catch (e) {
-        cachedClearTimeout = defaultClearTimeout;
-    }
-} ())
-function runTimeout(fun) {
-    if (cachedSetTimeout === setTimeout) {
-        //normal enviroments in sane situations
-        return setTimeout(fun, 0);
-    }
-    // if setTimeout wasn't available but was latter defined
-    if ((cachedSetTimeout === defaultSetTimout || !cachedSetTimeout) && setTimeout) {
-        cachedSetTimeout = setTimeout;
-        return setTimeout(fun, 0);
-    }
-    try {
-        // when when somebody has screwed with setTimeout but no I.E. maddness
-        return cachedSetTimeout(fun, 0);
-    } catch(e){
-        try {
-            // When we are in I.E. but the script has been evaled so I.E. doesn't trust the global object when called normally
-            return cachedSetTimeout.call(null, fun, 0);
-        } catch(e){
-            // same as above but when it's a version of I.E. that must have the global object for 'this', hopfully our context correct otherwise it will throw a global error
-            return cachedSetTimeout.call(this, fun, 0);
-        }
-    }
-
-
-}
-function runClearTimeout(marker) {
-    if (cachedClearTimeout === clearTimeout) {
-        //normal enviroments in sane situations
-        return clearTimeout(marker);
-    }
-    // if clearTimeout wasn't available but was latter defined
-    if ((cachedClearTimeout === defaultClearTimeout || !cachedClearTimeout) && clearTimeout) {
-        cachedClearTimeout = clearTimeout;
-        return clearTimeout(marker);
-    }
-    try {
-        // when when somebody has screwed with setTimeout but no I.E. maddness
-        return cachedClearTimeout(marker);
-    } catch (e){
-        try {
-            // When we are in I.E. but the script has been evaled so I.E. doesn't  trust the global object when called normally
-            return cachedClearTimeout.call(null, marker);
-        } catch (e){
-            // same as above but when it's a version of I.E. that must have the global object for 'this', hopfully our context correct otherwise it will throw a global error.
-            // Some versions of I.E. have different rules for clearTimeout vs setTimeout
-            return cachedClearTimeout.call(this, marker);
-        }
-    }
-
-
-
-}
-var queue = [];
-var draining = false;
-var currentQueue;
-var queueIndex = -1;
-
-function cleanUpNextTick() {
-    if (!draining || !currentQueue) {
-        return;
-    }
-    draining = false;
-    if (currentQueue.length) {
-        queue = currentQueue.concat(queue);
-    } else {
-        queueIndex = -1;
-    }
-    if (queue.length) {
-        drainQueue();
-    }
-}
-
-function drainQueue() {
-    if (draining) {
-        return;
-    }
-    var timeout = runTimeout(cleanUpNextTick);
-    draining = true;
-
-    var len = queue.length;
-    while(len) {
-        currentQueue = queue;
-        queue = [];
-        while (++queueIndex < len) {
-            if (currentQueue) {
-                currentQueue[queueIndex].run();
-            }
-        }
-        queueIndex = -1;
-        len = queue.length;
-    }
-    currentQueue = null;
-    draining = false;
-    runClearTimeout(timeout);
-}
-
-process.nextTick = function (fun) {
-    var args = new Array(arguments.length - 1);
-    if (arguments.length > 1) {
-        for (var i = 1; i < arguments.length; i++) {
-            args[i - 1] = arguments[i];
-        }
-    }
-    queue.push(new Item(fun, args));
-    if (queue.length === 1 && !draining) {
-        runTimeout(drainQueue);
-    }
-};
-
-// v8 likes predictible objects
-function Item(fun, array) {
-    this.fun = fun;
-    this.array = array;
-}
-Item.prototype.run = function () {
-    this.fun.apply(null, this.array);
-};
-process.title = 'browser';
-process.browser = true;
-process.env = {};
-process.argv = [];
-process.version = ''; // empty string to avoid regexp issues
-process.versions = {};
-
-function noop() {}
-
-process.on = noop;
-process.addListener = noop;
-process.once = noop;
-process.off = noop;
-process.removeListener = noop;
-process.removeAllListeners = noop;
-process.emit = noop;
-process.prependListener = noop;
-process.prependOnceListener = noop;
-
-process.listeners = function (name) { return [] }
-
-process.binding = function (name) {
-    throw new Error('process.binding is not supported');
-};
-
-process.cwd = function () { return '/' };
-process.chdir = function (dir) {
-    throw new Error('process.chdir is not supported');
-};
-process.umask = function() { return 0; };
-
-
-/***/ }),
-/* 6 */
 /***/ (function(module, exports, __webpack_require__) {
 
 (function webpackUniversalModuleDefinition(root, factory) {
@@ -28391,7 +28200,7 @@ function unbind(el) {
 //# sourceMappingURL=vuetify.js.map
 
 /***/ }),
-/* 7 */
+/* 6 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var require;var require;/**
@@ -29433,13 +29242,13 @@ module.exports = Vector2D;
 });
 
 /***/ }),
-/* 8 */
+/* 7 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__babel_loader_node_modules_vue_loader_lib_selector_type_script_index_0_app_vue__ = __webpack_require__(9);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__node_modules_vue_loader_lib_template_compiler_index_id_data_v_6ec2be08_hasScoped_false_node_modules_vue_loader_lib_selector_type_template_index_0_app_vue__ = __webpack_require__(11);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__babel_loader_node_modules_vue_loader_lib_selector_type_script_index_0_app_vue__ = __webpack_require__(8);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__node_modules_vue_loader_lib_template_compiler_index_id_data_v_6ec2be08_hasScoped_false_node_modules_vue_loader_lib_selector_type_template_index_0_app_vue__ = __webpack_require__(9);
 var disposed = false
 var normalizeComponent = __webpack_require__(0)
 /* script */
@@ -29483,12 +29292,10 @@ if (false) {(function () {
 
 
 /***/ }),
-/* 9 */
+/* 8 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vue_focus__ = __webpack_require__(10);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vue_focus___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_vue_focus__);
 //
 //
 //
@@ -29533,9 +29340,25 @@ if (false) {(function () {
 //
 //
 //
-
-
-
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 function shuffle(array) {
   var currentIndex = array.length,
@@ -29554,13 +29377,12 @@ function shuffle(array) {
   return array;
 }
 
-var start_points_total = 10000;
-var BG_OPACITY = 0.3;
+var start_points_total = 10000,
+    ABS_POINTS_TOTAL = 3000,
+    OOO_POINTS_TOTAL = 18000,
+    BG_OPACITY = 0.3;
 
 /* harmony default export */ __webpack_exports__["a"] = ({
-  directives: {
-    focus: __WEBPACK_IMPORTED_MODULE_0_vue_focus___default.a
-  },
   data() {
     return {
       /*Component Data*/
@@ -29570,8 +29392,10 @@ var BG_OPACITY = 0.3;
       LOST_PERCENT: 0,
       FINAL_SCORE: 0,
 
+      messages: ["You made it", "Nice job", "Nice work", "Wow", "Amazing"],
+      LB_MSG: 'Adding up your points...',
+
       PAUSED: false,
-      focus: false,
 
       answerValidate: false, //For text field
       answerStyles: {
@@ -29587,31 +29411,39 @@ var BG_OPACITY = 0.3;
 
       pointsTotal: start_points_total,
       started: false,
+      ended: false,
+      START_STAGE: 0,
+      CATEGORY: 0,
+      NAME: '',
+      categories: ["Integers", "Order of Operations", "Absolute Value", "Word Problems"],
+      categoriesINT: ['ints', 'ooo', 'abs', 'wp'],
 
       DOM_EL: document.querySelector('#math-problem.active'), //Current math problem DOM Element
 
-      math: [{ problem: '\\frac{72}{9}', js: 72 / 9 }, { problem: '\\frac{9}{3}', js: 9 / 3 }, { problem: '15\\times(-9)', js: 15 * -9 }, { problem: '-23+78', js: -23 + 78 }, { problem: '-93\\times12', js: -93 * 12 }]
+      math: [{ problem: '\\frac{72}{-9}', js: -8, cat: 'ints' }, { problem: '\\frac{-9}{3}', js: -3, cat: 'ints' }, { problem: '|7|', js: 7, cat: 'abs' }, { problem: '-57-49', js: -106, cat: 'ints' }, { problem: '(57*(32-21)-5)', js: 622, cat: 'ooo' }, { problem: '-5*56*(-8-9)', js: 4760, cat: 'ooo' }, { problem: '-|-5|+6', js: -5 + 6, cat: 'abs' }, { problem: '95(73+54)-63+9^5', js: 95 * (73 + 54) - 63 + 9 ^ 5, cat: 'ooo' }]
     };
   }, created() {
     //Shuffle the math problems
     this.math = shuffle(this.math);
+    this.msg = shuffle(this.messages)[0];
 
-    //Loop through all math problems and render them with KaTeX
     for (var i = 0; i < this.math.length; i++) {
+      //console.log('Parsing ' + this.math[i].problem);
       this.math[i].problem = katex.renderToString(this.math[i].problem);
     }
   }, mounted() {
-    //When key is pressed, assume it is for the answer text field.
-    var that = this;
-    window.addEventListener('keypress', function (e) {
-      that.focus = true;
-      if (e.keyCode === 13) {
-        that.checkAnswer();
+    //Save NAME field in localStorage (HTML5 API)
+    this.$watch('NAME', function (value) {
+      if (localStorage && value) {
+        localStorage.setItem('tf_name', value);
       }
-      that.$refs.answerTextField.focus();
     });
+    this.NAME = localStorage ? localStorage.getItem('tf_name') : '';
   }, methods: {
     startGame() {
+      window.onbeforeunload = function (event) {
+        return confirm("Confirm refresh");
+      };
       this.started = true;
       this.reset();
     },
@@ -29621,25 +29453,56 @@ var BG_OPACITY = 0.3;
         this.reset(); //New problem
       } else {
         this.answerValidate = true; //Show error
-        this.CURRENT_ANSWER = '';
       }
     }, reset() {
       this.PROB_INDEX++;
       if (this.math[this.PROB_INDEX]) {
-        this.LOST_PERCENT = 100;
-        this.LOSE_POINTS = 1;
-        this.pointsTotal = start_points_total;
-        this.math[this.PROB_INDEX].current = true;
-        this.answerValidate = false;
-        if (this.math[this.PROB_INDEX - 1]) {
-          this.math[this.PROB_INDEX - 1].current = false;
+        var correctCAT = this.categoriesINT[this.CATEGORY];
+        var currCAT = this.math[this.PROB_INDEX].cat;
+        if (currCAT == correctCAT) {
+          this.LOST_PERCENT = 100;
+          this.LOSE_POINTS = 1;
+          this.pointsTotal = start_points_total; //Starting points
+          //If category is absolute value, it will be 3,000 points
+          //If category is order of operations, it will be 20,000 points
+          if (currCAT == 'abs') {
+            this.pointsTotal = ABS_POINTS_TOTAL;
+          } else if (currCAT == 'ooo') {
+            this.pointsTotal = OOO_POINTS_TOTAL;
+          }
+          this.TOTAL_POINTS = this.pointsTotal;
+          this.answerValidate = false;
+          for (var i = 0; i < this.math.length; i++) {
+            this.math[i].current = false;
+          }
+          this.math[this.PROB_INDEX].current = true;
+          this.CORRECT_ANSWER = this.math[this.PROB_INDEX].js;
+          this.CURRENT_ANSWER = ''; //Text field
+          clearInterval(this.interval);
+          this.init();
+        } else {
+          //Find the next problem of the CORRECT category
+          this.reset();
         }
-        this.CORRECT_ANSWER = this.math[this.PROB_INDEX].js;
-        this.CURRENT_ANSWER = ''; //Text field
-        clearInterval(this.interval);
-        this.init();
       } else {
-        window.location.href = '#/game-over?score=' + this.FINAL_SCORE;
+        var score = this.FINAL_SCORE;
+        var name = this.NAME;
+        var that = this;
+
+        if (score > 0) {
+          var xhttp = new XMLHttpRequest();
+          xhttp.onreadystatechange = function () {
+            if (this.readyState == 4 && this.status == 200) {
+              that.LB_MSG = 'Check the leaderboard!';
+            }
+          };
+          xhttp.open("POST", "./src/components/lb.php?ins=" + name + '&add=' + score, true);
+          xhttp.send();
+        } else {
+          this.LB_MSG = 'Your score didn\'t change.';
+        }
+        that.started = false;
+        that.ended = true;
       }
     }, init() {
       var that = this;
@@ -29656,8 +29519,6 @@ var BG_OPACITY = 0.3;
           if (that.pointsTotal <= 0) {
             that.pointsTotal = 0;
             clearInterval(that.interval);
-
-            console.log(that);
             that.reset();
           }
         }
@@ -29667,52 +29528,7 @@ var BG_OPACITY = 0.3;
 });
 
 /***/ }),
-/* 10 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-var Vue = __webpack_require__(1);
-Vue = 'default' in Vue ? Vue['default'] : Vue;
-
-var version = '2.1.0';
-
-var compatible = (/^2\./).test(Vue.version);
-if (!compatible) {
-  Vue.util.warn('VueFocus ' + version + ' only supports Vue 2.x, and does not support Vue ' + Vue.version);
-}
-
-var focus = {
-  inserted: function(el, binding) {
-    if (binding.value) el.focus();
-    else el.blur();
-  },
-
-  componentUpdated: function(el, binding) {
-    if (binding.modifiers.lazy) {
-      if (Boolean(binding.value) === Boolean(binding.oldValue)) {
-        return;
-      }
-    }
-
-    if (binding.value) el.focus();
-    else el.blur();
-  },
-};
-
-var mixin = {
-  directives: {
-    focus: focus,
-  },
-};
-
-exports.version = version;
-exports.focus = focus;
-exports.mixin = mixin;
-
-/***/ }),
-/* 11 */
+/* 9 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -29720,162 +29536,243 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c(
-    "div",
-    { attrs: { id: "math-container" } },
-    [
-      _c(
-        "v-btn",
-        {
-          attrs: { icon: "" },
-          on: {
-            click: function($event) {
-              _vm.PAUSED = !_vm.PAUSED
-            }
-          }
-        },
-        [
-          !_vm.PAUSED
-            ? _c("v-icon", [_vm._v("pause")])
-            : _c("v-icon", [_vm._v("play_arrow")])
-        ],
-        1
-      ),
-      _vm._v(" "),
-      !this.started
-        ? _c(
-            "v-btn",
-            {
-              attrs: { id: "game-start-btn", block: "" },
-              on: {
-                click: function($event) {
-                  _vm.startGame()
+  return _c("div", { attrs: { id: "game" } }, [
+    _c(
+      "div",
+      { attrs: { id: "math-container" } },
+      [
+        this.started
+          ? _c(
+              "v-btn",
+              {
+                staticClass: "pause-btn",
+                class: { paused: _vm.PAUSED },
+                attrs: { icon: "" },
+                on: {
+                  click: function($event) {
+                    _vm.PAUSED = !_vm.PAUSED
+                  }
                 }
-              }
-            },
-            [_vm._v("START")]
-          )
-        : _c(
-            "div",
-            { attrs: { id: "math-game" } },
-            [
-              _vm._l(_vm.math, function(p) {
-                return _c("div", {
-                  staticClass: "bounce-pulse",
-                  class: { active: p.current },
-                  attrs: { id: "math-problem" },
-                  domProps: { innerHTML: _vm._s(p.problem) }
-                })
-              }),
-              _vm._v(" "),
-              _c(
-                "div",
-                { attrs: { id: "points-answer-container" } },
-                [
-                  _c("div", { attrs: { id: "total-points" } }, [
-                    _vm.pointsTotal > 0
-                      ? _c("span", [
-                          _vm._v(
-                            "Earn up to " + _vm._s(_vm.pointsTotal) + " points!"
-                          )
-                        ])
-                      : _c("span", [_vm._v("No points this time! :(")])
-                  ]),
-                  _vm._v(" "),
-                  _c("v-progress-linear", {
-                    staticStyle: { margin: "0" },
-                    attrs: {
-                      height: "5",
-                      warning:
-                        this.LOST_PERCENT < this.flashThreshold &&
-                        Math.round(this.LOST_PERCENT % 10) > 5 &&
-                        this.LOST_PERCENT > 0,
-                      error:
-                        this.LOST_PERCENT < this.flashThreshold &&
-                        Math.round(this.LOST_PERCENT % 10) <= 5 &&
-                        this.LOST_PERCENT > 0,
-                      secondary: this.LOST_PERCENT <= 0
-                    },
-                    model: {
-                      value: this.LOST_PERCENT,
-                      callback: function($$v) {
-                        this.LOST_PERCENT = $$v
+              },
+              [
+                !_vm.PAUSED
+                  ? _c("v-icon", [_vm._v("pause")])
+                  : _c("v-icon", [_vm._v("play_arrow")])
+              ],
+              1
+            )
+          : _vm._e(),
+        _vm._v(" "),
+        !_vm.started && !_vm.ended
+          ? _c("div", [
+              _c("div", { attrs: { id: "info" } }, [
+                _c(
+                  "div",
+                  { attrs: { id: "name" } },
+                  [
+                    _c("v-text-field", {
+                      attrs: {
+                        autofocus: "",
+                        placeholder: "Enter your name..."
                       },
-                      expression: "this.LOST_PERCENT"
-                    }
-                  }),
-                  _vm._v(" "),
-                  _c(
-                    "div",
-                    { style: _vm.answerStyles, attrs: { id: "math-answer" } },
-                    [
-                      _c(
-                        "div",
-                        {
-                          ref: "answerTextField",
-                          attrs: { id: "answer-text-field" }
+                      model: {
+                        value: _vm.NAME,
+                        callback: function($$v) {
+                          _vm.NAME = $$v
                         },
-                        [
-                          _c("v-text-field", {
-                            directives: [
-                              {
-                                name: "focus",
-                                rawName: "v-focus",
-                                value: _vm.focus,
-                                expression: "focus"
-                              }
-                            ],
-                            attrs: {
-                              autofocus: "",
-                              placeholder: "Your answer...",
-                              error: this.answerValidate
-                            },
-                            on: {
-                              focus: function($event) {
-                                _vm.focus = true
-                              },
-                              blue: function($event) {
-                                _vm.focus = false
-                              }
-                            },
-                            model: {
-                              value: _vm.CURRENT_ANSWER,
-                              callback: function($$v) {
-                                _vm.CURRENT_ANSWER = $$v
-                              },
-                              expression: "CURRENT_ANSWER"
-                            }
-                          })
-                        ],
-                        1
-                      ),
-                      _vm._v(" "),
+                        expression: "NAME"
+                      }
+                    }),
+                    _c("br")
+                  ],
+                  1
+                )
+              ]),
+              _vm._v(" "),
+              !this.started
+                ? _c(
+                    "div",
+                    { attrs: { id: "cat" } },
+                    [
+                      _vm._v("\n        Select a catrgory:\n        "),
                       _c(
-                        "v-btn",
+                        "v-btn-toggle",
                         {
-                          ref: "checkBtn",
-                          attrs: { id: "check-btn", icon: "" },
-                          on: {
-                            click: function($event) {
-                              _vm.checkAnswer()
-                            }
+                          attrs: { mandatory: "" },
+                          model: {
+                            value: _vm.CATEGORY,
+                            callback: function($$v) {
+                              _vm.CATEGORY = $$v
+                            },
+                            expression: "CATEGORY"
                           }
                         },
-                        [_c("v-icon", [_vm._v("check")])],
-                        1
+                        _vm._l(_vm.categories, function(cat) {
+                          return _c("v-btn", { key: cat }, [
+                            _vm._v(_vm._s(cat))
+                          ])
+                        })
                       )
                     ],
                     1
                   )
-                ],
-                1
-              )
-            ],
-            2
-          )
-    ],
-    1
-  )
+                : _vm._e()
+            ])
+          : _vm._e(),
+        _vm._v(" "),
+        !this.started && !this.ended
+          ? _c(
+              "v-btn",
+              {
+                attrs: { id: "game-start-btn" },
+                on: {
+                  click: function($event) {
+                    _vm.startGame()
+                  }
+                }
+              },
+              [_vm._v("START")]
+            )
+          : _vm._e(),
+        _vm._v(" "),
+        this.started
+          ? _c(
+              "div",
+              { attrs: { id: "math-game" } },
+              [
+                _vm._l(_vm.math, function(p) {
+                  return _c("div", {
+                    key: p.problem,
+                    staticClass: "bounce-pulse",
+                    class: { active: p.current && !_vm.PAUSED },
+                    attrs: { id: "math-problem" },
+                    domProps: { innerHTML: _vm._s(p.problem) }
+                  })
+                }),
+                _vm._v(" "),
+                _c(
+                  "div",
+                  { attrs: { id: "points-answer-container" } },
+                  [
+                    _c("div", { attrs: { id: "total-points" } }, [
+                      _vm.pointsTotal > 1
+                        ? _c("span", [
+                            _vm._v(
+                              "Earn up to " +
+                                _vm._s(_vm.pointsTotal) +
+                                " points!"
+                            )
+                          ])
+                        : _c("span", [_vm._v("No points this time! :(")])
+                    ]),
+                    _vm._v(" "),
+                    _c("v-progress-linear", {
+                      staticStyle: { margin: "0" },
+                      attrs: {
+                        height: "5",
+                        warning:
+                          this.LOST_PERCENT < this.flashThreshold &&
+                          Math.round(this.LOST_PERCENT % 10) > 5 &&
+                          this.LOST_PERCENT > 0,
+                        error:
+                          this.LOST_PERCENT < this.flashThreshold &&
+                          Math.round(this.LOST_PERCENT % 10) <= 5 &&
+                          this.LOST_PERCENT > 0,
+                        secondary: this.LOST_PERCENT <= 0
+                      },
+                      model: {
+                        value: this.LOST_PERCENT,
+                        callback: function($$v) {
+                          this.LOST_PERCENT = $$v
+                        },
+                        expression: "this.LOST_PERCENT"
+                      }
+                    }),
+                    _vm._v(" "),
+                    _c(
+                      "div",
+                      { style: _vm.answerStyles, attrs: { id: "math-answer" } },
+                      [
+                        _c(
+                          "div",
+                          {
+                            ref: "answerTextField",
+                            attrs: { id: "answer-text-field" }
+                          },
+                          [
+                            _c("v-text-field", {
+                              attrs: {
+                                autofocus: "",
+                                placeholder: "Your answer...",
+                                error: this.answerValidate
+                              },
+                              model: {
+                                value: _vm.CURRENT_ANSWER,
+                                callback: function($$v) {
+                                  _vm.CURRENT_ANSWER = $$v
+                                },
+                                expression: "CURRENT_ANSWER"
+                              }
+                            })
+                          ],
+                          1
+                        ),
+                        _vm._v(" "),
+                        _c(
+                          "v-btn",
+                          {
+                            ref: "checkBtn",
+                            attrs: { id: "check-btn", icon: "" },
+                            on: {
+                              click: function($event) {
+                                _vm.checkAnswer()
+                              }
+                            }
+                          },
+                          [_c("v-icon", [_vm._v("check")])],
+                          1
+                        )
+                      ],
+                      1
+                    )
+                  ],
+                  1
+                )
+              ],
+              2
+            )
+          : _vm._e(),
+        _vm._v(" "),
+        this.ended
+          ? _c("div", { ref: "gameover", attrs: { id: "game-over" } }, [
+              _c("h1", [_vm._v("Game over!")]),
+              _vm._v(" "),
+              _c("h3", [
+                _vm._v(
+                  _vm._s(_vm.msg) +
+                    "! Your final score was " +
+                    _vm._s(_vm.FINAL_SCORE) +
+                    "!"
+                )
+              ]),
+              _vm._v(" "),
+              _vm.LB_MSG
+                ? _c("span", { staticClass: "subheading" }, [
+                    _vm._v(_vm._s(_vm.LB_MSG))
+                  ])
+                : _vm._e()
+            ])
+          : _vm._e()
+      ],
+      1
+    ),
+    _vm._v(" "),
+    this.PAUSED
+      ? _c("div", { attrs: { id: "paused-container" } }, [
+          _c("h1", [_vm._v("Paused")])
+        ])
+      : _vm._e()
+  ])
 }
 var staticRenderFns = []
 render._withStripped = true
@@ -29889,17 +29786,17 @@ if (false) {
 }
 
 /***/ }),
-/* 12 */
+/* 10 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__babel_loader_node_modules_vue_loader_lib_selector_type_script_index_0_leaderboard_vue__ = __webpack_require__(18);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__node_modules_vue_loader_lib_template_compiler_index_id_data_v_281f5e64_hasScoped_false_node_modules_vue_loader_lib_selector_type_template_index_0_leaderboard_vue__ = __webpack_require__(19);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__babel_loader_node_modules_vue_loader_lib_selector_type_script_index_0_leaderboard_vue__ = __webpack_require__(16);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__node_modules_vue_loader_lib_template_compiler_index_id_data_v_281f5e64_hasScoped_false_node_modules_vue_loader_lib_selector_type_template_index_0_leaderboard_vue__ = __webpack_require__(17);
 var disposed = false
 function injectStyle (ssrContext) {
   if (disposed) return
-  __webpack_require__(13)
+  __webpack_require__(11)
 }
 var normalizeComponent = __webpack_require__(0)
 /* script */
@@ -29943,17 +29840,17 @@ if (false) {(function () {
 
 
 /***/ }),
-/* 13 */
+/* 11 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(14);
+var content = __webpack_require__(12);
 if(typeof content === 'string') content = [[module.i, content, '']];
 if(content.locals) module.exports = content.locals;
 // add the styles to the DOM
-var update = __webpack_require__(16)("17d336b1", content, false);
+var update = __webpack_require__(14)("17d336b1", content, false);
 // Hot Module Replacement
 if(false) {
  // When the styles change, update the <style> tags
@@ -29969,21 +29866,21 @@ if(false) {
 }
 
 /***/ }),
-/* 14 */
+/* 12 */
 /***/ (function(module, exports, __webpack_require__) {
 
-exports = module.exports = __webpack_require__(15)(undefined);
+exports = module.exports = __webpack_require__(13)(undefined);
 // imports
 
 
 // module
-exports.push([module.i, "\nhr {\n  border: none;\n  border-bottom: 1.5px solid black;\n  padding: 10px;\n}\n.player-name {\n  text-align: center\n}\ndiv#leaderboard ul {\n  list-style-type: none;\n  font-size: 24px;\n}\nbody {\n  overflow: auto !important;\n}\n", ""]);
+exports.push([module.i, "\ntable {\n  width: 100%;\n}\ntable tr td {\n  padding: 5px;\n  margin: 0;\n}\n\n", ""]);
 
 // exports
 
 
 /***/ }),
-/* 15 */
+/* 13 */
 /***/ (function(module, exports) {
 
 /*
@@ -30065,7 +29962,7 @@ function toComment(sourceMap) {
 
 
 /***/ }),
-/* 16 */
+/* 14 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /*
@@ -30084,7 +29981,7 @@ if (typeof DEBUG !== 'undefined' && DEBUG) {
   ) }
 }
 
-var listToStyles = __webpack_require__(17)
+var listToStyles = __webpack_require__(15)
 
 /*
 type StyleObject = {
@@ -30286,7 +30183,7 @@ function applyToTag (styleElement, obj) {
 
 
 /***/ }),
-/* 17 */
+/* 15 */
 /***/ (function(module, exports) {
 
 /**
@@ -30319,10 +30216,19 @@ module.exports = function listToStyles (parentId, list) {
 
 
 /***/ }),
-/* 18 */
+/* 16 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
+//
+//
+//
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -30349,25 +30255,51 @@ function map(value, low1, high1, low2, high2) {
     return {
       /*Component Data*/
       color: '255, 255, 255', //   54, 106, 188
-      leaderboard: [{ name: "Testing", score: 1200000 }, { name: "Is a nerd", score: 1190000 }, { name: "Testing", score: 1200000 }, { name: "Is a nerd", score: 1190000 }, { name: "Testing", score: 1200000 }, { name: "Is a nerd", score: 1190000 }, { name: "Testing", score: 1200000 }, { name: "Is a nerd", score: 1190000 }]
+      leaderboard: [
+        /*Loaded on `mounted()`*/
+      ],
+      LB_ERROR: null
     };
-  }, created() {
-    this.leaderboard.sort(function (a, b) {
-      return b.score - a.score;
-    });
-    var players = this.leaderboard.length;
-    var op;
-    for (var i = 0; i < players; i++) {
-      op = 0 - i + players;
-      this.leaderboard[i].rank = i + 1;
-      this.leaderboard[i].opacity = map(op, 0, players, 0, 1);
-      this.leaderboard[i].style = { backgroundColor: 'rgba(' + this.color + ', ' + this.leaderboard[i].opacity + ')' };
+  }, mounted() {
+    var xhttp = new XMLHttpRequest();
+    var that = this;
+    xhttp.onreadystatechange = function () {
+      if (this.readyState == 4 && this.status == 200) {
+        // Typical action to be performed when the document is ready:
+        that.leaderboard = JSON.parse(this.responseText);
+        //console.log(that.leaderboard);
+        that.sortLB();
+      } else {
+        that.LB_ERROR = true;
+      }
+    };
+    xhttp.open("GET", "./src/components/lb.php", true);
+    xhttp.send();
+  }, methods: {
+    sortLB() {
+      //Rank players based on score, in order
+      this.leaderboard.sort(function (a, b) {
+        return b.score - a.score;
+      });
+      var players = this.leaderboard.length;
+      var op;
+      var i = 0;
+
+      for (i = 0; i < players; i++) {
+        op = 0 - i + players;
+        this.leaderboard[i].rank = i + 1;
+        this.leaderboard[i].opacity = map(op, 0, players, 0, 1);
+        this.leaderboard[i].style = { backgroundColor: 'rgba(' + this.color + ', ' + this.leaderboard[i].opacity + ')' };
+        if (this.leaderboard[i].name == '') {
+          this.leaderboard[i].name = '(Unnamed)';
+        }
+      }
     }
   }
 });
 
 /***/ }),
-/* 19 */
+/* 17 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -30376,27 +30308,54 @@ var render = function() {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c("div", { attrs: { id: "leaderboard" } }, [
-    _c(
-      "ul",
-      _vm._l(_vm.leaderboard, function(player) {
-        return _c("div", { style: player.style }, [
-          _c("li", { staticClass: "player-name" }, [
-            _c("span", { staticClass: "left" }, [_vm._v(_vm._s(player.rank))]),
+    _c("table", [
+      _vm._m(0),
+      _vm._v(" "),
+      _c(
+        "tbody",
+        _vm._l(_vm.leaderboard, function(player) {
+          return _c("tr", { style: player.style }, [
+            _c("td", [_vm._v(_vm._s(player.rank))]),
             _vm._v(" "),
-            _c("span", { staticClass: "center" }, [
-              _vm._v(_vm._s(player.name))
-            ]),
+            _c("td", [_vm._v(_vm._s(player.name))]),
             _vm._v(" "),
-            _c("span", { staticClass: "right" }, [_vm._v(_vm._s(player.score))])
-          ]),
-          _vm._v(" "),
-          _c("hr")
-        ])
-      })
-    )
+            _c("td", [_vm._v(_vm._s(player.score))])
+          ])
+        })
+      )
+    ]),
+    _vm._v(" "),
+    _vm.LB_ERROR
+      ? _c(
+          "div",
+          [
+            _c(
+              "v-alert",
+              { staticStyle: { display: "flex" }, attrs: { error: "" } },
+              [_vm._v("Something went wrong!")]
+            )
+          ],
+          1
+        )
+      : _vm._e()
   ])
 }
-var staticRenderFns = []
+var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("thead", [
+      _c("tr", [
+        _c("td", [_vm._v("Rank")]),
+        _vm._v(" "),
+        _c("td", [_vm._v("Name")]),
+        _vm._v(" "),
+        _c("td", [_vm._v("Score")])
+      ])
+    ])
+  }
+]
 render._withStripped = true
 var esExports = { render: render, staticRenderFns: staticRenderFns }
 /* harmony default export */ __webpack_exports__["a"] = (esExports);
@@ -30408,13 +30367,13 @@ if (false) {
 }
 
 /***/ }),
-/* 20 */
+/* 18 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__babel_loader_node_modules_vue_loader_lib_selector_type_script_index_0_game_over_vue__ = __webpack_require__(21);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__node_modules_vue_loader_lib_template_compiler_index_id_data_v_8732c114_hasScoped_false_node_modules_vue_loader_lib_selector_type_template_index_0_game_over_vue__ = __webpack_require__(22);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__babel_loader_node_modules_vue_loader_lib_selector_type_script_index_0_game_over_vue__ = __webpack_require__(19);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__node_modules_vue_loader_lib_template_compiler_index_id_data_v_8732c114_hasScoped_false_node_modules_vue_loader_lib_selector_type_template_index_0_game_over_vue__ = __webpack_require__(20);
 var disposed = false
 var normalizeComponent = __webpack_require__(0)
 /* script */
@@ -30458,7 +30417,7 @@ if (false) {(function () {
 
 
 /***/ }),
-/* 21 */
+/* 19 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -30487,7 +30446,7 @@ var msgs = ['Nice job!', 'Well done!', 'Great work!', 'You made it!'];
 });
 
 /***/ }),
-/* 22 */
+/* 20 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -30515,7 +30474,7 @@ if (false) {
 }
 
 /***/ }),
-/* 23 */
+/* 21 */
 /***/ (function(module, exports) {
 
 // removed by extract-text-webpack-plugin

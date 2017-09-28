@@ -3,9 +3,10 @@
 <head>
   <link href='https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Material+Icons' rel="stylesheet">
   <link rel="stylesheet" type="text/css" href="./dist/main.css">
+  <title>ThinkFast!</title>
 </head>
 <body>
-  <div id="app">
+  <div id="app" v-cloak>
     <v-toolbar absolute scroll-off-screen class="primary">
       <v-toolbar-title v-html="app.name"></v-toolbar-title>
       <v-btn icon :loading="loading.reload" v-on:click="reload()">

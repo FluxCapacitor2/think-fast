@@ -149,3 +149,29 @@ span.katex {
 .leaderboard-nav img {
   width: 70%;
   height: 70%; }
+
+#paused-container {
+  text-align: center;
+  background-color: rgba(0, 0, 0, 0.87);
+  color: #ffffff;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  z-index: 10; }
+
+.pause-btn {
+  z-index: 100;
+  color: #ffffff; }
+  .pause-btn.paused {
+    background-color: #ffffff;
+    color: #000000; }
+
+div#info {
+  display: block; }
+
+[v-cloak] {
+  display: none; }
+
+a[title="Hosted on free web hosting 000webhost.com. Host your own website for FREE."][target="_blank"] {
+  display: none !important; }

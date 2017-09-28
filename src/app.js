@@ -15,7 +15,7 @@ require('./style.sass');
 const routes = [
   {path: '/', component: App},
   {path: '/leaderboard', component: Leaderboard},
-  {path: '/gameover', component: GameOver}
+  {path: '*', component: App}
 ]
 
 const router = new VueRouter({

@@ -1,3 +1,4 @@
+const webpack = require('webpack');
 const ExtractTextPlugin = require("extract-text-webpack-plugin");
 const path = require('path');
 
@@ -14,7 +15,13 @@ module.exports = {
   },
 
   plugins: [
-    extractSass
+    extractSass,
+
+    new webpack.DefinePlugin({
+      'process.env': {
+        NODE_ENV: '"production"'
+      }
+    })
   ],
 
   resolve: {

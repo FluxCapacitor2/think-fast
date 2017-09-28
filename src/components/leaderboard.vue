@@ -1,17 +1,26 @@
 <template>
   <div id="leaderboard">
     <!-- Leaderboard goes here -->
-    <ul>
-      <div v-for="player in leaderboard" v-bind:style="player.style">
-        <li class="player-name">
-          <span class="left">{{player.rank}}</span>
-          <span class="center">{{player.name}}</span>
-          <span class="right">{{player.score}}</span>
-      </li>
-        <hr>
+      <table>
+        <thead>
+          <tr>
+            <td>Rank</td>
+            <td>Name</td>
+            <td>Score</td>
+          </tr>
+        </thead>
+        <tbody>
+          <tr v-for="player in leaderboard" v-bind:style="player.style">
+            <td>{{player.rank}}</td>
+            <td>{{player.name}}</td>
+            <td>{{player.score}}</td>
+          </tr>
+        </tbody>
+      </table>
+      <div v-if="LB_ERROR">
+        <v-alert error style="display: flex;">Something went wrong!</v-alert>
       </div>
-
-    </ul>
+      </div>
   </div>
 </template>
 
@@ -25,46 +34,56 @@
         /*Component Data*/
         color: '255, 255, 255', //   54, 106, 188
         leaderboard: [
-          {name: "Testing", score: 1200000},
-          {name: "Is a nerd",  score: 1190000},
-          {name: "Testing", score: 1200000},
-          {name: "Is a nerd",  score: 1190000},
-          {name: "Testing", score: 1200000},
-          {name: "Is a nerd",  score: 1190000},
-          {name: "Testing", score: 1200000},
-          {name: "Is a nerd",  score: 1190000}
-        ]
+          /*Loaded on `mounted()`*/
+        ],
+        LB_ERROR: null
       }
-    }, created() {
-      this.leaderboard.sort(function(a, b) {
-          return b.score - a.score;
-      });
-      var players = this.leaderboard.length;
-      var op;
-      for(var i = 0; i < players; i++) {
-        op = 0-i + players;
-        this.leaderboard[i].rank = i+1;
-        this.leaderboard[i].opacity = map(op, 0, players, 0, 1);
-        this.leaderboard[i].style = {backgroundColor:'rgba(' + this.color + ', ' + this.leaderboard[i].opacity + ')'}
+    }, mounted() {
+      var xhttp = new XMLHttpRequest();
+      var that = this;
+      xhttp.onreadystatechange = function() {
+          if (this.readyState == 4 && this.status == 200) {
+             // Typical action to be performed when the document is ready:
+             that.leaderboard = JSON.parse(this.responseText);
+             //console.log(that.leaderboard);
+             that.sortLB();
+          } else {
+            that.LB_ERROR = true;
+          }
+      };
+      xhttp.open("GET", "./src/components/lb.php", true);
+      xhttp.send();
+    }, methods: {
+      sortLB() {
+        //Rank players based on score, in order
+        this.leaderboard.sort(function(a, b) {
+            return b.score - a.score;
+        });
+        var players = this.leaderboard.length;
+        var op;
+        var i = 0;
+
+        for(i = 0; i < players; i++) {
+          op = 0-i + players;
+          this.leaderboard[i].rank = i+1;
+          this.leaderboard[i].opacity = map(op, 0, players, 0, 1);
+          this.leaderboard[i].style = {backgroundColor:'rgba(' + this.color + ', ' + this.leaderboard[i].opacity + ')'};
+          if(this.leaderboard[i].name == '') {
+            this.leaderboard[i].name = '(Unnamed)';
+          }
+        }
       }
     }
   }
 </script>
 
 <style>
-  hr {
-    border: none;
-    border-bottom: 1.5px solid black;
-    padding: 10px;
+  table {
+    width: 100%;
   }
-  .player-name {
-    text-align: center
+  table tr td {
+    padding: 5px;
+    margin: 0;
   }
-  div#leaderboard ul {
-    list-style-type: none;
-    font-size: 24px;
-  }
-  body {
-    overflow: auto !important;
-  }
+
 </style>
