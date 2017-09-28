@@ -13,13 +13,27 @@ use Medoo\Medoo;
 
 header('Content-Type: application/json');
 
-$db = new Medoo([
+$db = null;
+
+try {
+  //Production envorinment
+  $db = new Medoo([
+      'database_type' => 'mysql',
+      'database_name' => 'id3039771_thinkfast',
+      'server' => 'localhost',
+      'username' => 'id3039771_admin',
+      'password' => 'thinKFastZ152'
+  ]);
+} catch(Exception $e) {
+  //Dev envorinment
+  $db = new Medoo([
     'database_type' => 'mysql',
     'database_name' => 'id3039771_thinkfast',
     'server' => 'localhost',
-    'username' => 'root', //  id3039771_admin
-    'password' => '' // thinKFastZ152
-]);
+    'username' => 'root',
+    'password' => ''
+  ]);
+}
 
 
 

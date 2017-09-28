@@ -29359,6 +29359,12 @@ if (false) {(function () {
 //
 //
 //
+//
+//
+//
+//
+//
+//
 
 function shuffle(array) {
   var currentIndex = array.length,
@@ -29377,15 +29383,23 @@ function shuffle(array) {
   return array;
 }
 
+var pointMultis = {
+  'Integers': 1,
+  'Absolute Value': 0.3,
+  'Order of Operations': 2,
+  'Word Problems': 1
+};
+
 var start_points_total = 10000,
-    ABS_POINTS_TOTAL = 3000,
-    OOO_POINTS_TOTAL = 18000,
+    ABS_POINTS_TOTAL = pointMultis['Absolute Value'],
+    OOO_POINTS_TOTAL = pointMultis['Order of Operations'],
     BG_OPACITY = 0.3;
 
 /* harmony default export */ __webpack_exports__["a"] = ({
   data() {
     return {
       /*Component Data*/
+
       TOTAL_POINTS: start_points_total,
       LOSE_POINTS_MS: 100,
       LOSE_POINTS: 1,
@@ -29417,12 +29431,42 @@ var start_points_total = 10000,
       NAME: '',
       categories: ["Integers", "Order of Operations", "Absolute Value", "Word Problems"],
       categoriesINT: ['ints', 'ooo', 'abs', 'wp'],
+      pointMultis: pointMultis,
 
-      DOM_EL: document.querySelector('#math-problem.active'), //Current math problem DOM Element
+      //DOM_EL: document.querySelector('#math-problem.active'), //Current math problem DOM Element
 
-      math: [{ problem: '\\frac{72}{-9}', js: -8, cat: 'ints' }, { problem: '\\frac{-9}{3}', js: -3, cat: 'ints' }, { problem: '|7|', js: 7, cat: 'abs' }, { problem: '-57-49', js: -106, cat: 'ints' }, { problem: '(57*(32-21)-5)', js: 622, cat: 'ooo' }, { problem: '-5*56*(-8-9)', js: 4760, cat: 'ooo' }, { problem: '-|-5|+6', js: -5 + 6, cat: 'abs' }, { problem: '95(73+54)-63+9^5', js: 95 * (73 + 54) - 63 + 9 ^ 5, cat: 'ooo' }]
+      catOverview: {},
+
+      math: [
+      /*
+        INTEGERS
+      */
+      { problem: '\\frac{72}{-9}', js: -8, cat: 'ints' }, { problem: '\\frac{-9}{3}', js: -3, cat: 'ints' }, { problem: '-65+76*54-87', js: -65 + 76 * 54 - 87, cat: 'ints' }, { problem: '-57-49', js: -106, cat: 'ints' }, { problem: '25*-12^2', js: 25 * -12 ^ 2, cat: 'ints' }, { problem: '36/2+36', js: 36 / 2 + 36, cat: 'ints' }, { problem: '54(-65-74)+34-41', js: 54 * (-65 - 74) + 34 - 41, cat: 'ints' },
+      /*
+        ABSOLUTE VALUE
+      */
+      { problem: '|7|', js: 7, cat: 'abs' }, { problem: '-|-34|+45', js: -Math.abs(-34) + 45, cat: 'abs' }, { problem: '-|-5|+6', js: -5 + 6, cat: 'abs' },
+      /*
+        ORDER OF OPERATIONS
+      */
+      { problem: '95(73+54)-63+9^5', js: 95 * (73 + 54) - 63 + 9 ^ 5, cat: 'ooo' }, { problem: '93(-5+7)-73+34', js: 93 * (-5 + 7) - 73 + 34, cat: 'ooo' }, { problem: '(57*(32-21)-5)', js: 622, cat: 'ooo' }, { problem: '-5*56*(-8-9)', js: 4760, cat: 'ooo' }, { problem: '12+5-(-26)+(-2)', js: 12 + 5 - -26 + -2, cat: 'ooo' }]
     };
   }, created() {
+    for (var i = 0; i < this.math.length; i++) {
+      var cat = this.math[i].cat;
+      if (cat) {
+        if (this.catOverview[cat]) {
+          this.catOverview[cat]++;
+          this.catOverview[this.categories[this.categoriesINT.indexOf(cat)]]++;
+        } else {
+          this.catOverview[cat] = 1;
+          this.catOverview[this.categories[this.categoriesINT.indexOf(cat)]] = 1;
+        }
+      } else {
+        console.warn('No category specified for ' + this.math[i].problem);
+      }
+    }
+    console.log(this.catOverview);
     //Shuffle the math problems
     this.math = shuffle(this.math);
     this.msg = shuffle(this.messages)[0];
@@ -29564,60 +29608,117 @@ var render = function() {
           : _vm._e(),
         _vm._v(" "),
         !_vm.started && !_vm.ended
-          ? _c("div", [
-              _c("div", { attrs: { id: "info" } }, [
-                _c(
-                  "div",
-                  { attrs: { id: "name" } },
-                  [
-                    _c("v-text-field", {
-                      attrs: {
-                        autofocus: "",
-                        placeholder: "Enter your name..."
-                      },
-                      model: {
-                        value: _vm.NAME,
-                        callback: function($$v) {
-                          _vm.NAME = $$v
-                        },
-                        expression: "NAME"
-                      }
-                    }),
-                    _c("br")
-                  ],
-                  1
-                )
-              ]),
-              _vm._v(" "),
-              !this.started
-                ? _c(
+          ? _c(
+              "div",
+              [
+                _c("div", { attrs: { id: "info" } }, [
+                  _c(
                     "div",
-                    { attrs: { id: "cat" } },
+                    { attrs: { id: "name" } },
                     [
-                      _vm._v("\n        Select a catrgory:\n        "),
-                      _c(
-                        "v-btn-toggle",
-                        {
-                          attrs: { mandatory: "" },
-                          model: {
-                            value: _vm.CATEGORY,
-                            callback: function($$v) {
-                              _vm.CATEGORY = $$v
-                            },
-                            expression: "CATEGORY"
-                          }
+                      _c("v-text-field", {
+                        attrs: {
+                          autofocus: "",
+                          placeholder: "Enter your name..."
                         },
-                        _vm._l(_vm.categories, function(cat) {
-                          return _c("v-btn", { key: cat }, [
-                            _vm._v(_vm._s(cat))
-                          ])
-                        })
-                      )
+                        model: {
+                          value: _vm.NAME,
+                          callback: function($$v) {
+                            _vm.NAME = $$v
+                          },
+                          expression: "NAME"
+                        }
+                      }),
+                      _c("br")
                     ],
                     1
                   )
-                : _vm._e()
-            ])
+                ]),
+                _vm._v(" "),
+                !this.started
+                  ? _c(
+                      "div",
+                      { attrs: { id: "cat" } },
+                      [
+                        _vm._v("\n        Select a category:\n        "),
+                        _c(
+                          "v-btn-toggle",
+                          {
+                            attrs: { mandatory: "" },
+                            model: {
+                              value: _vm.CATEGORY,
+                              callback: function($$v) {
+                                _vm.CATEGORY = $$v
+                              },
+                              expression: "CATEGORY"
+                            }
+                          },
+                          [
+                            _vm._l(_vm.categories, function(cat) {
+                              return _c(
+                                "v-btn",
+                                { key: cat },
+                                [
+                                  _vm._v(
+                                    "\n            " +
+                                      _vm._s(cat) +
+                                      "\n            "
+                                  ),
+                                  _c(
+                                    "v-chip",
+                                    {
+                                      staticClass: "cat-chip white--text",
+                                      attrs: { small: "" }
+                                    },
+                                    [
+                                      _vm._v(
+                                        _vm._s(_vm.catOverview[cat] || "None")
+                                      )
+                                    ]
+                                  ),
+                                  _vm._v(" "),
+                                  _c(
+                                    "v-chip",
+                                    {
+                                      staticClass: "multi-chip white--text",
+                                      attrs: { small: "" }
+                                    },
+                                    [
+                                      _vm._v(
+                                        _vm._s(_vm.pointMultis[cat] || "Error")
+                                      )
+                                    ]
+                                  )
+                                ],
+                                1
+                              )
+                            }),
+                            _c("br")
+                          ],
+                          2
+                        )
+                      ],
+                      1
+                    )
+                  : _vm._e(),
+                _vm._v(" "),
+                _c(
+                  "v-chip",
+                  { staticClass: "cat-chip white--text", attrs: { small: "" } },
+                  [_vm._v("Number of problems")]
+                ),
+                _vm._v(" "),
+                _c(
+                  "v-chip",
+                  {
+                    staticClass: "multi-chip white--text",
+                    attrs: { small: "" }
+                  },
+                  [_vm._v("Point Multiplier")]
+                )
+              ],
+              1
+            )
           : _vm._e(),
         _vm._v(" "),
         !this.started && !this.ended
@@ -30246,6 +30347,7 @@ module.exports = function listToStyles (parentId, list) {
 //
 //
 //
+//
 
 function map(value, low1, high1, low2, high2) {
   return low2 + (value - low1) * (high2 - low2) / (high1 - low1);
@@ -30258,19 +30360,17 @@ function map(value, low1, high1, low2, high2) {
       leaderboard: [
         /*Loaded on `mounted()`*/
       ],
-      LB_ERROR: null
+      LB_ERROR: false,
+      unnamed: 0
     };
   }, mounted() {
     var xhttp = new XMLHttpRequest();
     var that = this;
     xhttp.onreadystatechange = function () {
       if (this.readyState == 4 && this.status == 200) {
-        // Typical action to be performed when the document is ready:
         that.leaderboard = JSON.parse(this.responseText);
-        //console.log(that.leaderboard);
         that.sortLB();
-      } else {
-        that.LB_ERROR = true;
+        that.LB_ERROR = false;
       }
     };
     xhttp.open("GET", "./src/components/lb.php", true);
@@ -30285,14 +30385,22 @@ function map(value, low1, high1, low2, high2) {
       var op;
       var i = 0;
 
+      //Remove unnamed player(s)
+      for (var i = 0; i < players; i++) {
+        if (this.leaderboard[i].name == '') {
+          //Found unnamed player
+          this.unnamed = this.leaderboard[i].score;
+          this.leaderboard.splice(i, 1);
+          players--;
+        }
+      }
+
       for (i = 0; i < players; i++) {
         op = 0 - i + players;
         this.leaderboard[i].rank = i + 1;
         this.leaderboard[i].opacity = map(op, 0, players, 0, 1);
         this.leaderboard[i].style = { backgroundColor: 'rgba(' + this.color + ', ' + this.leaderboard[i].opacity + ')' };
-        if (this.leaderboard[i].name == '') {
-          this.leaderboard[i].name = '(Unnamed)';
-        }
+        this.LB_ERROR = false;
       }
     }
   }
@@ -30322,18 +30430,26 @@ var render = function() {
             _c("td", [_vm._v(_vm._s(player.score))])
           ])
         })
-      )
+      ),
+      _vm._v(" "),
+      _c("i", [
+        _vm._v(
+          "Unnamed players have earned " +
+            _vm._s(_vm.unnamed) +
+            " points! Make sure you type in your name before you play!"
+        )
+      ])
     ]),
     _vm._v(" "),
     _vm.LB_ERROR
       ? _c(
           "div",
           [
-            _c(
-              "v-alert",
-              { staticStyle: { display: "flex" }, attrs: { error: "" } },
-              [_vm._v("Something went wrong!")]
-            )
+            _vm.LB_ERROR
+              ? _c("v-alert", { attrs: { error: "" } }, [
+                  _vm._v("Something went wrong!")
+                ])
+              : _vm._e()
           ],
           1
         )

@@ -13,11 +13,17 @@
           </div>
         </div>
         <div id="cat" v-if="!this.started">
-          Select a catrgory:
+          Select a category:
           <v-btn-toggle mandatory v-model="CATEGORY">
-            <v-btn v-for="cat in categories" :key="cat">{{cat}}</v-btn>
+            <v-btn v-for="cat in categories" :key="cat">
+              {{cat}}
+              <v-chip class="cat-chip white--text" small>{{ catOverview[cat] || 'None'}}</v-chip>
+              <v-chip class="multi-chip white--text" small>{{ pointMultis[cat] || 'Error' }}</v-chip>
+            </v-btn><br>
           </v-btn-toggle>
         </div>
+        <v-chip class="cat-chip white--text" small>Number of problems</v-chip>
+        <v-chip class="multi-chip white--text" small>Point Multiplier</v-chip>
       </div>
       <v-btn v-if="!this.started && !this.ended" v-on:click="startGame()" id="game-start-btn">START</v-btn>
       <div id="math-game" v-if="this.started">
@@ -77,15 +83,24 @@
     return array;
   }
 
+  var pointMultis = {
+    'Integers': 1,
+    'Absolute Value': 0.3,
+    'Order of Operations': 2,
+    'Word Problems': 1
+  }
+
+
   var start_points_total = 10000,
-    ABS_POINTS_TOTAL = 3000,
-    OOO_POINTS_TOTAL = 18000,
+    ABS_POINTS_TOTAL = pointMultis['Absolute Value'],
+    OOO_POINTS_TOTAL = pointMultis['Order of Operations'],
     BG_OPACITY = 0.3;
 
   export default {
     data() {
       return {
         /*Component Data*/
+
         TOTAL_POINTS: start_points_total,
         LOSE_POINTS_MS: 100,
         LOSE_POINTS: 1,
@@ -117,21 +132,55 @@
         NAME: '',
         categories: ["Integers", "Order of Operations", "Absolute Value", "Word Problems"],
         categoriesINT: ['ints', 'ooo', 'abs', 'wp'],
+        pointMultis: pointMultis,
 
-        DOM_EL: document.querySelector('#math-problem.active'), //Current math problem DOM Element
+        //DOM_EL: document.querySelector('#math-problem.active'), //Current math problem DOM Element
+
+        catOverview: {},
 
         math: [
+          /*
+            INTEGERS
+          */
           {problem: '\\frac{72}{-9}', js: -8, cat: 'ints'},
           {problem: '\\frac{-9}{3}', js: -3, cat: 'ints'},
-          {problem: '|7|', js: 7, cat: 'abs'},
+          {problem: '-65+76*54-87', js: -65+76*54-87, cat: 'ints'},
           {problem: '-57-49', js: -106, cat: 'ints'},
+          {problem: '25*-12^2', js: 25*-12^2, cat: 'ints'},
+          {problem: '36/2+36', js: 36/2+36, cat: 'ints'},
+          {problem: '54(-65-74)+34-41', js: 54*(-65-74)+34-41, cat: 'ints'},
+          /*
+            ABSOLUTE VALUE
+          */
+          {problem: '|7|', js: 7, cat: 'abs'},
+          {problem: '-|-34|+45', js: -Math.abs(-34)+45, cat: 'abs'},
+          {problem: '-|-5|+6', js: -5+6, cat: 'abs'},
+          /*
+            ORDER OF OPERATIONS
+          */
+          {problem: '95(73+54)-63+9^5', js: 95*(73+54)-63+9^5, cat: 'ooo'},
+          {problem: '93(-5+7)-73+34', js: 93*(-5+7)-73+34, cat: 'ooo'},
           {problem: '(57*(32-21)-5)', js: 622, cat: 'ooo'},
           {problem: '-5*56*(-8-9)', js: 4760, cat: 'ooo'},
-          {problem: '-|-5|+6', js: -5+6, cat: 'abs'},
-          {problem: '95(73+54)-63+9^5', js: 95*(73+54)-63+9^5, cat: 'ooo'}
+          {problem: '12+5-(-26)+(-2)', js: 12+5-(-26)+(-2), cat: 'ooo'},
         ]
       }
     }, created() {
+      for(var i = 0; i < this.math.length; i++) {
+        var cat = this.math[i].cat;
+        if(cat) {
+          if(this.catOverview[cat]) {
+            this.catOverview[cat]++;
+            this.catOverview[this.categories[this.categoriesINT.indexOf(cat)]]++;
+          } else {
+            this.catOverview[cat] = 1;
+            this.catOverview[this.categories[this.categoriesINT.indexOf(cat)]] = 1;
+          }
+        } else {
+          console.warn('No category specified for ' + this.math[i].problem);
+        }
+      }
+      console.log(this.catOverview);
       //Shuffle the math problems
       this.math = shuffle(this.math);
       this.msg = shuffle(this.messages)[0];

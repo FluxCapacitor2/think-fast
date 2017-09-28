@@ -5,12 +5,6 @@
 @import 'color_palatte'
 @import 'vuetify.min.css'
 //
-//   NORMAL STYLES (static)
-//
-body
-  font-family: helvecita, roboto, KaTeX_Main
-  overflow: hidden
-//
 //   ANIMATED BACKGROUND COLOR (on <body> tag)
 //
 $bg_colors: ($md-red-500, $md-pink-500, $md-purple-500, $md-deep-purple-500, $md-indigo-500, $md-blue-500, $md-light-blue-500, $md-cyan-500, $md-teal-500, $md-green-500, $md-light-green-500, $md-lime-500, $md-yellow-500, $md-amber-500, $md-orange-500, $md-deep-orange-500, $md-brown-500, $md-grey-500, $md-blue-grey-500, $md-red-500)
@@ -65,12 +59,12 @@ div
       float: left
     & #check-btn
       float: right
+    &#info
+      display: block
 span
   &.katex
     font-family: Roboto, Helvecita, KaTeX_Main, sans-serif
     font-size: 300%
-::-webkit-scrollbar
-  display: none
 .leaderboard-nav img
   width: 70%
   height: 70%
@@ -89,8 +83,15 @@ span
   &.paused
     background-color: $md-white
     color: $md-black
-div#info
-  display: block
+body
+  font-family: helvecita, roboto, KaTeX_Main
+  overflow-y: hidden
+::-webkit-scrollbar
+  display: none
+.cat-chip
+  background-color: $md-blue-300
+.multi-chip
+  background-color: $md-red-300
 [v-cloak]
   display: none
 a[title="Hosted on free web hosting 000webhost.com. Host your own website for FREE."][target="_blank"]

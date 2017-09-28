@@ -16,9 +16,10 @@
             <td>{{player.score}}</td>
           </tr>
         </tbody>
+        <i>Unnamed players have earned {{unnamed}} points! Make sure you type in your name before you play!</i>
       </table>
       <div v-if="LB_ERROR">
-        <v-alert error style="display: flex;">Something went wrong!</v-alert>
+        <v-alert v-if="LB_ERROR" error>Something went wrong!</v-alert>
       </div>
       </div>
   </div>
@@ -36,19 +37,17 @@
         leaderboard: [
           /*Loaded on `mounted()`*/
         ],
-        LB_ERROR: null
+        LB_ERROR: false,
+        unnamed: 0
       }
     }, mounted() {
       var xhttp = new XMLHttpRequest();
       var that = this;
       xhttp.onreadystatechange = function() {
           if (this.readyState == 4 && this.status == 200) {
-             // Typical action to be performed when the document is ready:
              that.leaderboard = JSON.parse(this.responseText);
-             //console.log(that.leaderboard);
              that.sortLB();
-          } else {
-            that.LB_ERROR = true;
+             that.LB_ERROR = false;
           }
       };
       xhttp.open("GET", "./src/components/lb.php", true);
@@ -63,14 +62,22 @@
         var op;
         var i = 0;
 
+        //Remove unnamed player(s)
+        for(var i = 0; i < players; i++) {
+          if(this.leaderboard[i].name == '') {
+            //Found unnamed player
+            this.unnamed = this.leaderboard[i].score;
+            this.leaderboard.splice(i, 1);
+            players--;
+          }
+        }
+
         for(i = 0; i < players; i++) {
           op = 0-i + players;
           this.leaderboard[i].rank = i+1;
           this.leaderboard[i].opacity = map(op, 0, players, 0, 1);
           this.leaderboard[i].style = {backgroundColor:'rgba(' + this.color + ', ' + this.leaderboard[i].opacity + ')'};
-          if(this.leaderboard[i].name == '') {
-            this.leaderboard[i].name = '(Unnamed)';
-          }
+          this.LB_ERROR = false;
         }
       }
     }

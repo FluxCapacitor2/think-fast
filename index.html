@@ -3,14 +3,15 @@
 <head>
   <link href='https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Material+Icons' rel="stylesheet">
   <link rel="stylesheet" type="text/css" href="./dist/main.css">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0">
   <title>ThinkFast!</title>
 </head>
 <body>
   <div id="app" v-cloak>
     <v-toolbar absolute scroll-off-screen class="primary">
       <v-toolbar-title v-html="app.name"></v-toolbar-title>
-      <v-btn icon :loading="loading.reload" v-on:click="reload()">
-        <v-icon>refresh</v-icon>
+      <v-btn icon v-bind:loading="loading.reload" v-on:click="reload()">
+        <v-icon class="white--text">refresh</v-icon>
       </v-btn>
       <v-spacer></v-spacer>
       <router-link to="/">
