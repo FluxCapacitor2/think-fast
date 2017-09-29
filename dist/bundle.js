@@ -29441,7 +29441,7 @@ var start_points_total = 10000,
       /*
         INTEGERS
       */
-      { problem: '\\frac{72}{-9}', js: -8, cat: 'ints' }, { problem: '\\frac{-9}{3}', js: -3, cat: 'ints' }, { problem: '-65+76*54-87', js: -65 + 76 * 54 - 87, cat: 'ints' }, { problem: '-57-49', js: -106, cat: 'ints' }, { problem: '25*-12^2', js: 25 * -12 ^ 2, cat: 'ints' }, { problem: '36/2+36', js: 36 / 2 + 36, cat: 'ints' }, { problem: '54(-65-74)+34-41', js: 54 * (-65 - 74) + 34 - 41, cat: 'ints' },
+      { problem: '\\frac{72}{-9}', js: -8, cat: 'ints' }, { problem: '\\frac{-9}{3}', js: -3, cat: 'ints' }, { problem: '-65+76*54-87', js: -65 + 76 * 54 - 87, cat: 'ints' }, { problem: '-57-49', js: -106, cat: 'ints' }, { problem: '25*-12^2', js: 25 * -12 ^ 2, cat: 'ints' }, { problem: '36/2+36', js: 36 / 2 + 36, cat: 'ints' }, { problem: '54(-6)-41', js: 54 * -6 - 41, cat: 'ints' },
       /*
         ABSOLUTE VALUE
       */
@@ -29849,12 +29849,9 @@ var render = function() {
               _c("h1", [_vm._v("Game over!")]),
               _vm._v(" "),
               _c("h3", [
-                _vm._v(
-                  _vm._s(_vm.msg) +
-                    "! Your final score was " +
-                    _vm._s(_vm.FINAL_SCORE) +
-                    "!"
-                )
+                _vm._v(_vm._s(_vm.msg) + "! Your final score was "),
+                _c("b", [_vm._v(_vm._s(_vm.FINAL_SCORE))]),
+                _vm._v("!")
               ]),
               _vm._v(" "),
               _vm.LB_MSG

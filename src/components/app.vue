@@ -57,7 +57,7 @@
       </div>
       <div id="game-over" ref="gameover" v-if="this.ended">
         <h1>Game over!</h1>
-        <h3>{{msg}}! Your final score was {{FINAL_SCORE}}!</h3>
+        <h3>{{msg}}! Your final score was <b>{{FINAL_SCORE}}</b>!</h3>
         <span class="subheading" v-if="LB_MSG">{{LB_MSG}}</span>
       </div>
     </div>
@@ -148,7 +148,7 @@
           {problem: '-57-49', js: -106, cat: 'ints'},
           {problem: '25*-12^2', js: 25*-12^2, cat: 'ints'},
           {problem: '36/2+36', js: 36/2+36, cat: 'ints'},
-          {problem: '54(-65-74)+34-41', js: 54*(-65-74)+34-41, cat: 'ints'},
+          {problem: '54(-6)-41', js: 54*(-6)-41, cat: 'ints'},
           /*
             ABSOLUTE VALUE
           */
