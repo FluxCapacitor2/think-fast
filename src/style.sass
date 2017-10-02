@@ -13,8 +13,10 @@ $duration: $count*2
 
 body
   will-change: background-color
-  background-color: $md_blue_500
+  //background-color: $md_blue_500
   animation: bg-color #{$duration}s linear 0s infinite normal
+  animation-delay: -2s
+  animation-direction: alternate
 
 @keyframes bg-color
   $j: 0
@@ -92,6 +94,17 @@ body
   background-color: $md-blue-300
 .multi-chip
   background-color: $md-red-300
+thead, table i
+  color: $md-white
+.music-player .flex
+  //THE MUSIC PLAYER IS DISABLED ON THE DOMAIN UNTIL IS IT COMPLETELY FINISHED. REMOVE THIS WHEN THE PLAYER HAS FINISHED DEVELOPMENT. MAIN THINGS TO IMPROVE:
+  // - Position
+  // - Hover effect (you hover over a button, and the player GUI appears (use opacity and use transitions, it looks much better))
+  // - Optimize for mobile
+  display: none
+  & button
+    //display: inline-block
+
 [v-cloak]
   display: none
 a[title="Hosted on free web hosting 000webhost.com. Host your own website for FREE."][target="_blank"]

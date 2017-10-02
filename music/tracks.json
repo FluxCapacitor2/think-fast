@@ -1,0 +1,17 @@
+{
+  "tracks": [{
+    "track": "Candyland",
+    "author": "Tobu",
+    "file": "music/Tobu - Candyland.mp3",
+    "rights": "https://tobu.io/Candyland/download"
+  }, {
+    "track": "Colors",
+    "author": "Tobu",
+    "file": "music/Tobu - Colors.mp3",
+    "rights": "https://tobu.io/Colors/download"
+  }],
+  "authors": [{
+    "name": "Tobu",
+    "logo": "https://tobu.io/img/stores/tobu.png"
+  }]
+}

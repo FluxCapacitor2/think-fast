@@ -17,7 +17,7 @@
           <v-btn-toggle mandatory v-model="CATEGORY">
             <v-btn v-for="cat in categories" :key="cat">
               {{cat}}
-              <v-chip class="cat-chip white--text" small>{{ catOverview[cat] || 'None'}}</v-chip>
+              <v-chip class="cat-chip white--text" small>{{ catOverview[cat] || 0}}</v-chip>
               <v-chip class="multi-chip white--text" small>{{ pointMultis[cat] || 'Error' }}</v-chip>
             </v-btn><br>
           </v-btn-toggle>
@@ -25,7 +25,7 @@
         <v-chip class="cat-chip white--text" small>Number of problems</v-chip>
         <v-chip class="multi-chip white--text" small>Point Multiplier</v-chip>
       </div>
-      <v-btn v-if="!this.started && !this.ended" v-on:click="startGame()" id="game-start-btn">START</v-btn>
+      <v-btn v-if="!this.started && !this.ended && this.NAME.length >= 3" v-on:click="startGame()" id="game-start-btn">START</v-btn>
       <div id="math-game" v-if="this.started">
         <div id="math-problem" v-for="p in math" class="bounce-pulse" v-bind:class="{active: p.current && !PAUSED}" :key="p.problem" v-html="p.problem"></div>
       <div id="points-answer-container">
@@ -42,8 +42,10 @@
           :secondary="this.LOST_PERCENT<=0"
           ></v-progress-linear>
           <div id="math-answer" v-bind:style="answerStyles">
+            <v-btn id="check-btn" icon v-on:click="checkAnswer()" ref="checkBtn"><v-icon>check</v-icon></v-btn>
             <div id="answer-text-field" ref="answerTextField">
               <v-text-field
+                required
                 autofocus
                 v-model="CURRENT_ANSWER"
                 placeholder="Your answer..."
@@ -51,7 +53,6 @@
                 >
                 </v-text-field>
             </div>
-            <v-btn id="check-btn" icon v-on:click="checkAnswer()" ref="checkBtn"><v-icon>check</v-icon></v-btn>
           </div>
         </div>
       </div>
@@ -92,8 +93,8 @@
 
 
   var start_points_total = 10000,
-    ABS_POINTS_TOTAL = pointMultis['Absolute Value'],
-    OOO_POINTS_TOTAL = pointMultis['Order of Operations'],
+    ABS_POINTS_TOTAL = start_points_total * pointMultis['Absolute Value'],
+    OOO_POINTS_TOTAL = start_points_total * pointMultis['Order of Operations'],
     BG_OPACITY = 0.3;
 
   export default {
@@ -130,8 +131,8 @@
         START_STAGE: 0,
         CATEGORY: 0,
         NAME: '',
-        categories: ["Integers", "Order of Operations", "Absolute Value", "Word Problems"],
-        categoriesINT: ['ints', 'ooo', 'abs', 'wp'],
+        categories: ["Integers", "Order of Operations", "Absolute Value"],
+        categoriesINT: ['ints', 'ooo', 'abs'],
         pointMultis: pointMultis,
 
         //DOM_EL: document.querySelector('#math-problem.active'), //Current math problem DOM Element
@@ -146,15 +147,24 @@
           {problem: '\\frac{-9}{3}', js: -3, cat: 'ints'},
           {problem: '-65+76*54-87', js: -65+76*54-87, cat: 'ints'},
           {problem: '-57-49', js: -106, cat: 'ints'},
-          {problem: '25*-12^2', js: 25*-12^2, cat: 'ints'},
+          {problem: '25*-12^2', js: -3600, cat: 'ints'},
           {problem: '36/2+36', js: 36/2+36, cat: 'ints'},
           {problem: '54(-6)-41', js: 54*(-6)-41, cat: 'ints'},
+          {problem:'-54(85-76)+-63',js:-54*(85-76)+-63,cat:'ints'},
+          {problem: '64(2)+(-12)',js: 64*(2)+(-12), cat:'ints'},
+          {problem: '(212-32)*\\frac{5}{9}', js: (212-32)*(5/9), cat: 'ints'} //Fahrenheit to Celsius
+          {problem: '(68-32)*(\\frac{5}{9})', js: (68-32)*(5/9), cat: 'ints'} //Fahrenheit to Celsius
+
           /*
             ABSOLUTE VALUE
           */
           {problem: '|7|', js: 7, cat: 'abs'},
           {problem: '-|-34|+45', js: -Math.abs(-34)+45, cat: 'abs'},
           {problem: '-|-5|+6', js: -5+6, cat: 'abs'},
+          {problem: '|-34|', js: Math.abs(-34), cat: 'abs'},
+          {problem: '|65|', js: Math.abs(65), cat: 'abs'},
+          {problem: '|54|', js: Math.abs(54), cat: 'abs'},
+          problem: '|-56|', js: Math.abs(-56), cat: 'abs'},
           /*
             ORDER OF OPERATIONS
           */
@@ -163,6 +173,7 @@
           {problem: '(57*(32-21)-5)', js: 622, cat: 'ooo'},
           {problem: '-5*56*(-8-9)', js: 4760, cat: 'ooo'},
           {problem: '12+5-(-26)+(-2)', js: 12+5-(-26)+(-2), cat: 'ooo'},
+          {problem: '18(45+53)-32+24-9^8', js: 18*(45+53)-32+24-9^8, cat:'ooo'},
         ]
       }
     }, created() {
@@ -180,7 +191,6 @@
           console.warn('No category specified for ' + this.math[i].problem);
         }
       }
-      console.log(this.catOverview);
       //Shuffle the math problems
       this.math = shuffle(this.math);
       this.msg = shuffle(this.messages)[0];
@@ -199,9 +209,6 @@
       this.NAME = (localStorage) ? localStorage.getItem('tf_name') : '';
     }, methods: {
       startGame() {
-        window.onbeforeunload = function(event) {
-          return confirm("Confirm refresh");
-        };
         this.started = true;
         this.reset();
       },

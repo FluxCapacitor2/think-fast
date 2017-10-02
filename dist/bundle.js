@@ -214,6 +214,15 @@ var v = new _vue2.default({
   el: '#app',
   data: {
     window: window,
+    //Audio Player
+    MUSIC_PLAYING: false,
+    AUDIO_SOURCES: [/*See tracks.json*/],
+    AUDIO_TITLES: [/*Also loaded from tracks.json*/],
+    TRACK_RIGHTS: [/*Also loaded from tracks.json*/],
+    CURRENT_SONG: 0,
+    AUDIO_EL: undefined,
+    MUSIC_VOLUME: 100,
+
     app: {
       name: '<span class="think-fast">ThinkFast!</span>'
     }, loading: {
@@ -223,9 +232,89 @@ var v = new _vue2.default({
     reload: function reload() {
       this.loading.reload = true;
       window.location.reload(true);
+    },
+    prevSong: function prevSong() {
+      //console.log('Prev song');
+      this.CURRENT_SONG--;
+      if (this.AUDIO_SOURCES[this.CURRENT_SONG]) {
+        //CURRENT_SONG--; ^^
+      } else {
+        this.CURRENT_SONG = this.AUDIO_SOURCES.length - 1;
+      }
+      this.MUSIC_PLAYING = false;
+    },
+    nextSong: function nextSong() {
+      //console.log('Next song');
+      this.CURRENT_SONG++;
+      console.log(this.AUDIO_SOURCES[this.CURRENT_SONG]);
+      if (this.AUDIO_SOURCES[this.CURRENT_SONG]) {
+        //CURRENT_SONG++; ^^
+      } else {
+        this.CURRENT_SONG = 0;
+      }
+      this.MUSIC_PLAYING = false;
+    },
+    updatePlayStatus: function updatePlayStatus() {
+      this.MUSIC_PLAYING = isPlaying(this.audio);
     }
+  }, created: function created() {
+    //Load tracks.json for track info
+    var that = this;
+    var xhttp = new XMLHttpRequest();
+    xhttp.onreadystatechange = function () {
+      if (this.readyState == 4 && this.status == 200) {
+        var tracks = JSON.parse(this.responseText).tracks,
+            authors = JSON.parse(this.responseText).authors;
+        for (var i in tracks) {
+          //console.log(tracks[i]);
+          that.AUDIO_SOURCES.push(tracks[i].file);
+          that.AUDIO_TITLES.push(tracks[i].author + ' - ' + tracks[i].track);
+          that.TRACK_RIGHTS.push(tracks[i].rights);
+        }
+      }
+    };
+    xhttp.open("GET", "music/tracks.json", true);
+    xhttp.send();
+  },
+  mounted: function mounted() {
+    this.audio = this.$el.querySelectorAll('audio')[0];
+    this.$watch('MUSIC_PLAYING', function (e) {
+      if (e == true) {
+        //Play audio
+        this.audio.play();
+      } else if (e == false) {
+        this.audio.pause();
+      }
+    });
+    /*
+    this.$watch('MUSIC_VOLUME', function(e) {
+      //Update volume
+      this.audio.volume = e / 100;
+    });
+    */
+    this.$watch('CURRENT_SONG', function (e) {
+      this.audio.src = this.AUDIO_SOURCES[this.CURRENT_SONG];
+    });
+    /*
+    var that = this;
+    addListenerMulti(this.audio, 'play pause', function(event) {
+      that.updatePlayStatus();
+    });
+    */
   }
 });
+
+function addListenerMulti(el, s, fn) {
+  s.split(' ').forEach(function (e) {
+    return el.addEventListener(e, fn, false);
+  });
+}
+function isPlaying(a) {
+  var b = a.playing && !a.paused && a.currentTime >= 0 && a.readyState >= 2;
+  b = a !== undefined;
+  console.log(a, b);
+  return b;
+}
 
 var b = new _bounce2.default().scale({
   from: { x: 1.2, y: 1.5 },
@@ -29248,6 +29337,7 @@ module.exports = Vector2D;
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__babel_loader_node_modules_vue_loader_lib_selector_type_script_index_0_app_vue__ = __webpack_require__(8);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__babel_loader_node_modules_vue_loader_lib_selector_type_script_index_0_app_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__babel_loader_node_modules_vue_loader_lib_selector_type_script_index_0_app_vue__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__node_modules_vue_loader_lib_template_compiler_index_id_data_v_6ec2be08_hasScoped_false_node_modules_vue_loader_lib_selector_type_template_index_0_app_vue__ = __webpack_require__(9);
 var disposed = false
 var normalizeComponent = __webpack_require__(0)
@@ -29262,7 +29352,7 @@ var __vue_scopeId__ = null
 /* moduleIdentifier (server only) */
 var __vue_module_identifier__ = null
 var Component = normalizeComponent(
-  __WEBPACK_IMPORTED_MODULE_0__babel_loader_node_modules_vue_loader_lib_selector_type_script_index_0_app_vue__["a" /* default */],
+  __WEBPACK_IMPORTED_MODULE_0__babel_loader_node_modules_vue_loader_lib_selector_type_script_index_0_app_vue__["default"],
   __WEBPACK_IMPORTED_MODULE_1__node_modules_vue_loader_lib_template_compiler_index_id_data_v_6ec2be08_hasScoped_false_node_modules_vue_loader_lib_selector_type_template_index_0_app_vue__["a" /* default */],
   __vue_styles__,
   __vue_scopeId__,
@@ -29293,283 +29383,9 @@ if (false) {(function () {
 
 /***/ }),
 /* 8 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
+/***/ (function(module, exports) {
 
-"use strict";
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-
-function shuffle(array) {
-  var currentIndex = array.length,
-      temporaryValue,
-      randomIndex;
-  // While there remain elements to shuffle...
-  while (0 !== currentIndex) {
-    // Pick a remaining element...
-    randomIndex = Math.floor(Math.random() * currentIndex);
-    currentIndex -= 1;
-    // And swap it with the current element.
-    temporaryValue = array[currentIndex];
-    array[currentIndex] = array[randomIndex];
-    array[randomIndex] = temporaryValue;
-  }
-  return array;
-}
-
-var pointMultis = {
-  'Integers': 1,
-  'Absolute Value': 0.3,
-  'Order of Operations': 2,
-  'Word Problems': 1
-};
-
-var start_points_total = 10000,
-    ABS_POINTS_TOTAL = pointMultis['Absolute Value'],
-    OOO_POINTS_TOTAL = pointMultis['Order of Operations'],
-    BG_OPACITY = 0.3;
-
-/* harmony default export */ __webpack_exports__["a"] = ({
-  data() {
-    return {
-      /*Component Data*/
-
-      TOTAL_POINTS: start_points_total,
-      LOSE_POINTS_MS: 100,
-      LOSE_POINTS: 1,
-      LOST_PERCENT: 0,
-      FINAL_SCORE: 0,
-
-      messages: ["You made it", "Nice job", "Nice work", "Wow", "Amazing"],
-      LB_MSG: 'Adding up your points...',
-
-      PAUSED: false,
-
-      answerValidate: false, //For text field
-      answerStyles: {
-        backgroundColor: 'rgba(0, 0, 0, ' + BG_OPACITY + ')'
-      },
-
-      CORRECT_ANSWER: null,
-      CURRENT_ANSWER: '',
-      PROB_INDEX: -1,
-
-      flashThreshold: 33,
-      interval: undefined,
-
-      pointsTotal: start_points_total,
-      started: false,
-      ended: false,
-      START_STAGE: 0,
-      CATEGORY: 0,
-      NAME: '',
-      categories: ["Integers", "Order of Operations", "Absolute Value", "Word Problems"],
-      categoriesINT: ['ints', 'ooo', 'abs', 'wp'],
-      pointMultis: pointMultis,
-
-      //DOM_EL: document.querySelector('#math-problem.active'), //Current math problem DOM Element
-
-      catOverview: {},
-
-      math: [
-      /*
-        INTEGERS
-      */
-      { problem: '\\frac{72}{-9}', js: -8, cat: 'ints' }, { problem: '\\frac{-9}{3}', js: -3, cat: 'ints' }, { problem: '-65+76*54-87', js: -65 + 76 * 54 - 87, cat: 'ints' }, { problem: '-57-49', js: -106, cat: 'ints' }, { problem: '25*-12^2', js: 25 * -12 ^ 2, cat: 'ints' }, { problem: '36/2+36', js: 36 / 2 + 36, cat: 'ints' }, { problem: '54(-6)-41', js: 54 * -6 - 41, cat: 'ints' },
-      /*
-        ABSOLUTE VALUE
-      */
-      { problem: '|7|', js: 7, cat: 'abs' }, { problem: '-|-34|+45', js: -Math.abs(-34) + 45, cat: 'abs' }, { problem: '-|-5|+6', js: -5 + 6, cat: 'abs' },
-      /*
-        ORDER OF OPERATIONS
-      */
-      { problem: '95(73+54)-63+9^5', js: 95 * (73 + 54) - 63 + 9 ^ 5, cat: 'ooo' }, { problem: '93(-5+7)-73+34', js: 93 * (-5 + 7) - 73 + 34, cat: 'ooo' }, { problem: '(57*(32-21)-5)', js: 622, cat: 'ooo' }, { problem: '-5*56*(-8-9)', js: 4760, cat: 'ooo' }, { problem: '12+5-(-26)+(-2)', js: 12 + 5 - -26 + -2, cat: 'ooo' }]
-    };
-  }, created() {
-    for (var i = 0; i < this.math.length; i++) {
-      var cat = this.math[i].cat;
-      if (cat) {
-        if (this.catOverview[cat]) {
-          this.catOverview[cat]++;
-          this.catOverview[this.categories[this.categoriesINT.indexOf(cat)]]++;
-        } else {
-          this.catOverview[cat] = 1;
-          this.catOverview[this.categories[this.categoriesINT.indexOf(cat)]] = 1;
-        }
-      } else {
-        console.warn('No category specified for ' + this.math[i].problem);
-      }
-    }
-    console.log(this.catOverview);
-    //Shuffle the math problems
-    this.math = shuffle(this.math);
-    this.msg = shuffle(this.messages)[0];
-
-    for (var i = 0; i < this.math.length; i++) {
-      //console.log('Parsing ' + this.math[i].problem);
-      this.math[i].problem = katex.renderToString(this.math[i].problem);
-    }
-  }, mounted() {
-    //Save NAME field in localStorage (HTML5 API)
-    this.$watch('NAME', function (value) {
-      if (localStorage && value) {
-        localStorage.setItem('tf_name', value);
-      }
-    });
-    this.NAME = localStorage ? localStorage.getItem('tf_name') : '';
-  }, methods: {
-    startGame() {
-      window.onbeforeunload = function (event) {
-        return confirm("Confirm refresh");
-      };
-      this.started = true;
-      this.reset();
-    },
-    checkAnswer() {
-      if (this.CURRENT_ANSWER == this.CORRECT_ANSWER) {
-        this.FINAL_SCORE += this.pointsTotal;
-        this.reset(); //New problem
-      } else {
-        this.answerValidate = true; //Show error
-      }
-    }, reset() {
-      this.PROB_INDEX++;
-      if (this.math[this.PROB_INDEX]) {
-        var correctCAT = this.categoriesINT[this.CATEGORY];
-        var currCAT = this.math[this.PROB_INDEX].cat;
-        if (currCAT == correctCAT) {
-          this.LOST_PERCENT = 100;
-          this.LOSE_POINTS = 1;
-          this.pointsTotal = start_points_total; //Starting points
-          //If category is absolute value, it will be 3,000 points
-          //If category is order of operations, it will be 20,000 points
-          if (currCAT == 'abs') {
-            this.pointsTotal = ABS_POINTS_TOTAL;
-          } else if (currCAT == 'ooo') {
-            this.pointsTotal = OOO_POINTS_TOTAL;
-          }
-          this.TOTAL_POINTS = this.pointsTotal;
-          this.answerValidate = false;
-          for (var i = 0; i < this.math.length; i++) {
-            this.math[i].current = false;
-          }
-          this.math[this.PROB_INDEX].current = true;
-          this.CORRECT_ANSWER = this.math[this.PROB_INDEX].js;
-          this.CURRENT_ANSWER = ''; //Text field
-          clearInterval(this.interval);
-          this.init();
-        } else {
-          //Find the next problem of the CORRECT category
-          this.reset();
-        }
-      } else {
-        var score = this.FINAL_SCORE;
-        var name = this.NAME;
-        var that = this;
-
-        if (score > 0) {
-          var xhttp = new XMLHttpRequest();
-          xhttp.onreadystatechange = function () {
-            if (this.readyState == 4 && this.status == 200) {
-              that.LB_MSG = 'Check the leaderboard!';
-            }
-          };
-          xhttp.open("POST", "./src/components/lb.php?ins=" + name + '&add=' + score, true);
-          xhttp.send();
-        } else {
-          this.LB_MSG = 'Your score didn\'t change.';
-        }
-        that.started = false;
-        that.ended = true;
-      }
-    }, init() {
-      var that = this;
-      this.interval = setInterval(function () {
-        if (!that.PAUSED) {
-          //Allow pausing functionality
-          if (that.pointsTotal % 20 == 0) {
-            //Every 20 points lost, it gets faster.
-            that.LOSE_POINTS++;
-          }
-          that.LOST_PERCENT = that.pointsTotal / that.TOTAL_POINTS * 100; //Percent of points that you can get (updates constantly) (goes DOWN)
-          that.pointsTotal -= that.LOSE_POINTS;
-
-          if (that.pointsTotal <= 0) {
-            that.pointsTotal = 0;
-            clearInterval(that.interval);
-            that.reset();
-          }
-        }
-      }, this.LOSE_POINTS_MS);
-    }
-  }
-});
+throw new Error("Module build failed: SyntaxError: C:/xampp/htdocs/math-game/v2/src/components/app.vue: Unexpected token, expected , (156:8)\n\n\u001b[0m \u001b[90m 154 | \u001b[39m        {problem\u001b[33m:\u001b[39m \u001b[32m'64(2)+(-12)'\u001b[39m\u001b[33m,\u001b[39mjs\u001b[33m:\u001b[39m \u001b[35m64\u001b[39m\u001b[33m*\u001b[39m(\u001b[35m2\u001b[39m)\u001b[33m+\u001b[39m(\u001b[33m-\u001b[39m\u001b[35m12\u001b[39m)\u001b[33m,\u001b[39m cat\u001b[33m:\u001b[39m\u001b[32m'ints'\u001b[39m}\u001b[33m,\u001b[39m\n \u001b[90m 155 | \u001b[39m        {problem\u001b[33m:\u001b[39m \u001b[32m'(212-32)*\\\\frac{5}{9}'\u001b[39m\u001b[33m,\u001b[39m js\u001b[33m:\u001b[39m (\u001b[35m212\u001b[39m\u001b[33m-\u001b[39m\u001b[35m32\u001b[39m)\u001b[33m*\u001b[39m(\u001b[35m5\u001b[39m\u001b[35m/9), cat: 'ints'} /\u001b[39m\u001b[33m/\u001b[39m\u001b[33mFahrenheit\u001b[39m to \u001b[33mCelsius\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 156 | \u001b[39m        {problem\u001b[33m:\u001b[39m \u001b[32m'(68-32)*(\\\\frac{5}{9})'\u001b[39m\u001b[33m,\u001b[39m js\u001b[33m:\u001b[39m (\u001b[35m68\u001b[39m\u001b[33m-\u001b[39m\u001b[35m32\u001b[39m)\u001b[33m*\u001b[39m(\u001b[35m5\u001b[39m\u001b[35m/9), cat: 'ints'} /\u001b[39m\u001b[33m/\u001b[39m\u001b[33mFahrenheit\u001b[39m to \u001b[33mCelsius\u001b[39m\n \u001b[90m     | \u001b[39m        \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 157 | \u001b[39m\n \u001b[90m 158 | \u001b[39m        \u001b[90m/*\u001b[39m\n \u001b[90m 159 | \u001b[39m\u001b[90m          ABSOLUTE VALUE\u001b[39m\u001b[0m\n");
 
 /***/ }),
 /* 9 */
@@ -29670,11 +29486,7 @@ var render = function() {
                                       staticClass: "cat-chip white--text",
                                       attrs: { small: "" }
                                     },
-                                    [
-                                      _vm._v(
-                                        _vm._s(_vm.catOverview[cat] || "None")
-                                      )
-                                    ]
+                                    [_vm._v(_vm._s(_vm.catOverview[cat] || 0))]
                                   ),
                                   _vm._v(" "),
                                   _c(
@@ -29721,7 +29533,7 @@ var render = function() {
             )
           : _vm._e(),
         _vm._v(" "),
-        !this.started && !this.ended
+        !this.started && !this.ended && this.NAME.length >= 3
           ? _c(
               "v-btn",
               {
@@ -29795,6 +29607,21 @@ var render = function() {
                       { style: _vm.answerStyles, attrs: { id: "math-answer" } },
                       [
                         _c(
+                          "v-btn",
+                          {
+                            ref: "checkBtn",
+                            attrs: { id: "check-btn", icon: "" },
+                            on: {
+                              click: function($event) {
+                                _vm.checkAnswer()
+                              }
+                            }
+                          },
+                          [_c("v-icon", [_vm._v("check")])],
+                          1
+                        ),
+                        _vm._v(" "),
+                        _c(
                           "div",
                           {
                             ref: "answerTextField",
@@ -29803,6 +29630,7 @@ var render = function() {
                           [
                             _c("v-text-field", {
                               attrs: {
+                                required: "",
                                 autofocus: "",
                                 placeholder: "Your answer...",
                                 error: this.answerValidate
@@ -29816,21 +29644,6 @@ var render = function() {
                               }
                             })
                           ],
-                          1
-                        ),
-                        _vm._v(" "),
-                        _c(
-                          "v-btn",
-                          {
-                            ref: "checkBtn",
-                            attrs: { id: "check-btn", icon: "" },
-                            on: {
-                              click: function($event) {
-                                _vm.checkAnswer()
-                              }
-                            }
-                          },
-                          [_c("v-icon", [_vm._v("check")])],
                           1
                         )
                       ],
