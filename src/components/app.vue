@@ -152,8 +152,8 @@
           {problem: '54(-6)-41', js: 54*(-6)-41, cat: 'ints'},
           {problem:'-54(85-76)+-63',js:-54*(85-76)+-63,cat:'ints'},
           {problem: '64(2)+(-12)',js: 64*(2)+(-12), cat:'ints'},
-          {problem: '(212-32)*\\frac{5}{9}', js: (212-32)*(5/9), cat: 'ints'} //Fahrenheit to Celsius
-          {problem: '(68-32)*(\\frac{5}{9})', js: (68-32)*(5/9), cat: 'ints'} //Fahrenheit to Celsius
+          {problem: '(212-32)*\\frac{5}{9}', js: (212-32)*(5/9), cat: 'ints'}, //Fahrenheit to Celsius
+          {problem: '(68-32)*(\\frac{5}{9})', js: (68-32)*(5/9), cat: 'ints'}, //Fahrenheit to Celsius
 
           /*
             ABSOLUTE VALUE
@@ -164,7 +164,7 @@
           {problem: '|-34|', js: Math.abs(-34), cat: 'abs'},
           {problem: '|65|', js: Math.abs(65), cat: 'abs'},
           {problem: '|54|', js: Math.abs(54), cat: 'abs'},
-          problem: '|-56|', js: Math.abs(-56), cat: 'abs'},
+          {problem: '|-56|', js: Math.abs(-56), cat: 'abs'},
           /*
             ORDER OF OPERATIONS
           */
@@ -173,7 +173,7 @@
           {problem: '(57*(32-21)-5)', js: 622, cat: 'ooo'},
           {problem: '-5*56*(-8-9)', js: 4760, cat: 'ooo'},
           {problem: '12+5-(-26)+(-2)', js: 12+5-(-26)+(-2), cat: 'ooo'},
-          {problem: '18(45+53)-32+24-9^8', js: 18*(45+53)-32+24-9^8, cat:'ooo'},
+          {problem: '18(45+53)-32+24-9^8', js: 18*(45+53)-32+24-9^8, cat:'ooo'}
         ]
       }
     }, created() {
